@@ -1,0 +1,29 @@
+#pragma once
+#include "glm/glm.hpp"
+#include <vector>
+#include <glad/glad.h>
+
+class SSBO{
+public:
+    SSBO(unsigned int slot);
+
+    template<typename T,typename ST>
+    void changeData(std::vector<T> *Data){
+        std::vector<ST> matrices;
+        matrices.reserve(Data->size());
+        for (auto &t : *Data)
+            matrices.push_back((ST)t);
+
+        use();
+        glBufferData(GL_SHADER_STORAGE_BUFFER, matrices.size() * sizeof(ST), matrices.data(), GL_DYNAMIC_DRAW);
+        bind();
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+    }
+
+    void use();
+    void bind();
+
+    unsigned int id;
+    unsigned int slot;
+};
