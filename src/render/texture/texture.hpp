@@ -1,6 +1,6 @@
 #pragma once
-
-class Texture2D{
+#include <Object.hpp>
+class Texture2D:public Object{
 public:
     Texture2D(char* pathToFile);
     void bind();

@@ -2,10 +2,12 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include "Mesh.hpp"
+#include "ObjectManager.hpp"
 #include "TaskManager/Task.hpp"
 #include "camera.hpp"
 #include "glm/fwd.hpp"
 #include "texture.hpp"
+#include "vector.hpp"
 #include "vertex.hpp"
 #include "node.hpp"
 #include "scene.hpp"
@@ -15,10 +17,10 @@
 
 static bool a=false,b=false;
 
-static App& app=App::instance();
+static App* app;
 
-static scene* sahne=new scene;
-static scene* sahne2=new scene;
+static scene* sahne;
+static scene* sahne2;
 
 static node* obje1=nullptr;
 static node* obje2=nullptr;
@@ -33,6 +35,14 @@ void startFunction1(double){
         obje1=new node;
     if(obje2==nullptr)
         obje2=new node;
+
+    obje1->name="obje1";
+    obje1->addTag("obje");
+
+    obje2->name="obje2";
+    obje2->addTag("obje");
+
+    obje1=ObjectManager::instance().getObject<node>("obje1");
 
     cam->calculate();
 
@@ -92,6 +102,8 @@ void startFunction1(double){
     obje1Mesh->changeTexture(doku);
 
     obje1->changeMesh(obje1Mesh);
+    ObjectManager& objectManager=
+    ObjectManager::instance();
 
     Mesh* obje2Mesh = new Mesh(mesh);
     obje2Mesh->changeTexture(doku);
@@ -179,7 +191,7 @@ void startFunction2(double){
 
 void cameraUpdate(double deltaTime) {
     Input& input = Input::instance();
-    camera* cam = app.getActiveScene().getActiveCamera();
+    camera* cam = app->getActiveScene().getActiveCamera();
 
     float speed = 1.5f;
 
@@ -254,8 +266,8 @@ void updateObje1Rotation(double deltaTime){
     Input& input=Input::instance();
 
     if (input.isKeyDown(GLFW_KEY_Z)){
-        obje1->getTransform()->Rotation=vec3(0,0,0);
-        obje2->getTransform()->Rotation=vec3(0,0,0);
+        obje1->getTransform()->Rotation={0,0,0};
+        obje2->getTransform()->Rotation={0,0,0};
     }
 
     if (input.isKeyDown(GLFW_KEY_UP)){
@@ -280,7 +292,9 @@ void updateObje1Rotation(double deltaTime){
 
 
 int main() {
-    app.init((char*)"Game", 800, 800);
+    app=&App::instance();
+
+    app->init((char*)"Game", 800, 800);
 
     startTask* startTask1= new startTask(startFunction1,true);
     startTask* startTask2= new startTask(startFunction2,true);
@@ -291,6 +305,9 @@ int main() {
     
     updateTask* updateObje1RotationTask=new updateTask(updateObje1Rotation,true);
 
+    sahne=new scene;
+    sahne2=new scene;
+
     sahne->addStartTask(startTask1);
     sahne->addUpdateTask(cameraUpdateTask);
     sahne->addUpdateTask(updateSceneTask);
@@ -300,9 +317,9 @@ int main() {
     sahne2->addUpdateTask(cameraUpdateTask);
     sahne2->addUpdateTask(updateSceneTask);
     
-    app.addScene(sahne);
-    app.addScene(sahne2);
+    app->addScene(sahne);
+    app->addScene(sahne2);
 
-    app.run();
+    app->run();
     return 0;
 }

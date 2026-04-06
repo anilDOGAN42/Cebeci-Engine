@@ -1,13 +1,13 @@
 #include "application.hpp"
-#include "TaskManager/TaskManager.hpp"
-#include "VBO.hpp"
+#include "TaskManager.hpp"
 #include "scene.hpp"
 #include "shader.hpp"
 #include "Input.hpp"
 #include "stbi_impl.hpp"
 
-App::App(){
-
+App::App(){}
+App::~App(){
+    //Destroy all of the objects and close the program normally. 
 }
 
 App& App::instance() {

@@ -1,10 +1,11 @@
 #pragma once
+#include <Object.hpp>
 #include "transform.hpp"
 #include <vector>
 
 class Mesh;
 
-class node{
+class node: public Object{
 public:
     node();
 

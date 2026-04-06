@@ -5,10 +5,11 @@
 #include "texture.hpp"
 #include "vertex.hpp"
 #include <vector>
+#include <Object.hpp>
 
 class node;
 
-class Mesh{
+class Mesh:public Object{
 public:
     Mesh(std::vector<vertex> verticies);
     void changeNode(node* Node);

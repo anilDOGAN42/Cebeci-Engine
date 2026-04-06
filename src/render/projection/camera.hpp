@@ -2,8 +2,9 @@
 #include "glm/fwd.hpp"
 #include <glm/glm.hpp>
 #include <glad/glad.h>
+#include <Object.hpp>
 
-class camera{
+class camera:public Object{
 public:
     virtual void calculate();
 

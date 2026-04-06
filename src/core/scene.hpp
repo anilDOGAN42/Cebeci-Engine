@@ -4,7 +4,7 @@
 #include <vector>
 #include <camera.hpp>
 
-class scene{
+class scene:public Object{
 public:
     void addNode(node* Node);
     void drawScene();

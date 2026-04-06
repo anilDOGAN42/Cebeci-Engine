@@ -1,14 +1,12 @@
 #pragma once
 #include "glm/glm.hpp"
 
+struct Vec2;
+struct Vec3;
+struct Vec4;
 
-class vec2;
-class vec3;
-class vec4;
-
-class vec2{
+typedef struct Vec2{
 public:
-    vec2(float x=0,float y=0);
     float x,y;
     operator glm::vec2() {
         return glm::vec2(x,y);
@@ -19,14 +17,14 @@ public:
     operator glm::vec4() {
         return glm::vec4(x,y,0,0);
     }
-    operator vec3() ;
-    operator vec4() ;
+    operator Vec3() ;
+    operator Vec4() ;
 
-};
+}vec2;
 
-class vec3{
+typedef struct Vec3{
 public:
-    vec3(float x=0,float y=0,float z=0);
+
     float x,y,z;
     operator glm::vec2() {
         return glm::vec2(x,y);
@@ -37,14 +35,13 @@ public:
     operator glm::vec4() {
         return glm::vec4(x,y,z,0);
     }
-    operator vec2();
-    operator vec4();
+    operator Vec2();
+    operator Vec4();
 
-};
-
-class vec4{
+}vec3;
+typedef struct Vec4{
 public:
-    vec4(float x=0,float y=0,float z=0,float w=0);
+    
     float x,y,z,w;
     operator glm::vec2() {
         return glm::vec2(x,y);
@@ -55,6 +52,6 @@ public:
     operator glm::vec4() {
         return glm::vec4(x,y,z,w);
     }
-    operator vec2();
-    operator vec3();
-};
+    operator Vec2();
+    operator Vec3();
+}vec4;

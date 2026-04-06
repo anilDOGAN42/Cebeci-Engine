@@ -32,6 +32,7 @@ public:
 
 private:
     App();
+    ~App();
 
     GLFWwindow* window;
     ShaderProgram* shaderProgram;
