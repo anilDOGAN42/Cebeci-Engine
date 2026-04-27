@@ -8,6 +8,10 @@
 
 void camera::calculate() {}
 
+camera::~camera(){
+    
+}
+
 glm::mat4 camera::getProjection() { 
     return glm::mat4(1.0f);
 }
@@ -16,8 +20,9 @@ glm::mat4 camera::getView() {
     return glm::mat4(1.0f);
 }
 
-camera3D::camera3D(float zFar){
+camera3D::camera3D(float zFar,float pov){
     this->zFar=zFar;
+    this->pov=pov;
 }
 
 void camera3D::calculate() {
@@ -36,7 +41,7 @@ void camera3D::calculate() {
 
     view = glm::lookAt(camPosition,sum,glm::vec3(0.0f, 1.0f, 0.0f));
 
-    projection = glm::perspective(glm::radians(45.0f), App::instance().getScreenRatio(),0.1f,zFar);
+    projection = glm::perspective(glm::radians(pov), App::instance().getScreenRatio(),0.1f,zFar);
 }
 
 glm::mat4 camera3D::getProjection(){

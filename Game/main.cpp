@@ -28,7 +28,7 @@ static node* obje2=nullptr;
 static node* sahne2obje1=nullptr;
 
 void startFunction1(double){
-    camera3D* cam= new camera3D(100.0f);
+    camera3D* cam= new camera3D(100.0f,45.0f);
 
     cam->camPosition={0,0,-3};
     if(obje1==nullptr)
@@ -37,12 +37,7 @@ void startFunction1(double){
         obje2=new node;
 
     obje1->name="obje1";
-    obje1->addTag("obje");
-
     obje2->name="obje2";
-    obje2->addTag("obje");
-
-    obje1=ObjectManager::instance().getObject<node>("obje1");
 
     cam->calculate();
 
@@ -101,6 +96,8 @@ void startFunction1(double){
     Mesh* obje1Mesh = new Mesh(mesh);
     obje1Mesh->changeTexture(doku);
 
+    obje1Mesh->name="mesh";
+
     obje1->changeMesh(obje1Mesh);
     ObjectManager& objectManager=
     ObjectManager::instance();
@@ -121,7 +118,7 @@ void startFunction1(double){
 }
 
 void startFunction2(double){
-    camera3D* cam= new camera3D(100.0f);
+    camera3D* cam= new camera3D(100.0f,90.0f);
 
     cam->camPosition={0,0,-3};
     if(sahne2obje1==nullptr)
@@ -131,57 +128,7 @@ void startFunction2(double){
 
     Texture2D* doku= new Texture2D((char*)"./textures/doku2.png");
 
-    std::vector<vertex> mesh={
-        vertex{{-0.5,-0.5,-0.5},{0,0}},
-        vertex{{-0.5,0.5,-0.5},{0,1}},
-        vertex{{0.5,-0.5,-0.5},{1,0}},
-        vertex{{-0.5,0.5,-0.5},{0,1}},
-        vertex{{0.5,0.5,-0.5},{1,1}},
-        vertex{{0.5,-0.5,-0.5},{1,0}},
-
-        
-        vertex{{0,0,0},{0,0}},
-        vertex{{0,1,0},{0,1}},
-        vertex{{0,0,1},{1,0}},
-        vertex{{0,1,0},{0,1}},
-        vertex{{0,1,1},{1,1}},
-        vertex{{0,0,1},{1,0}},
-
-        
-        vertex{{0,0,0},{0,0}},
-        vertex{{0,0,1},{0,1}},
-        vertex{{1,0,0},{1,0}},
-        vertex{{0,0,1},{0,1}},
-        vertex{{1,0,1},{1,1}},
-        vertex{{1,0,0},{1,0}},
-
-
-        vertex{{0,1,0},{0,0}},
-        vertex{{0,1,1},{0,1}},
-        vertex{{1,1,0},{1,0}},
-        vertex{{0,1,1},{0,1}},
-        vertex{{1,1,1},{1,1}},
-        vertex{{1,1,0},{1,0}},
-
-
-        vertex{{0,0,1},{0,0}},
-        vertex{{0,1,1},{0,1}},
-        vertex{{1,0,1},{1,0}},
-        vertex{{0,1,1},{0,1}},
-        vertex{{1,1,1},{1,1}},
-        vertex{{1,0,1},{1,0}},
-
-        
-        vertex{{1,0,0},{0,0}},
-        vertex{{1,1,0},{0,1}},
-        vertex{{1,0,1},{1,0}},
-        vertex{{1,1,0},{0,1}},
-        vertex{{1,1,1},{1,1}},
-        vertex{{1,0,1},{1,0}},
-
-    };
-
-    sahne2obje1->changeMesh(new Mesh(mesh));
+    sahne2obje1->changeMesh(ObjectManager::instance().getObject<Mesh>("mesh"));
     sahne2obje1->getMesh()->changeTexture(doku);
 
     sahne2->addNode(sahne2obje1);
@@ -191,7 +138,7 @@ void startFunction2(double){
 
 void cameraUpdate(double deltaTime) {
     Input& input = Input::instance();
-    camera* cam = app->getActiveScene().getActiveCamera();
+    camera* cam = app->getActiveScene()->getActiveCamera();
 
     float speed = 1.5f;
 
@@ -295,6 +242,7 @@ int main() {
     app=&App::instance();
 
     app->init((char*)"Game", 800, 800);
+
 
     startTask* startTask1= new startTask(startFunction1,true);
     startTask* startTask2= new startTask(startFunction2,true);

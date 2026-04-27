@@ -3,6 +3,7 @@
 class Texture2D:public Object{
 public:
     Texture2D(char* pathToFile);
+    ~Texture2D();
     void bind();
     unsigned int getId();
 

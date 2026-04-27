@@ -18,11 +18,14 @@ public:
     glm::mat4 projection;
     glm::mat4 view;
 
+
+    virtual ~camera();
 };
 
 class camera3D: public camera {
 public:
-    camera3D(float zFar);
+    camera3D(float zFar,float pov);
+    ~camera3D()=default;
 
     void calculate() override;
     glm::mat4 getProjection() override;
@@ -30,12 +33,14 @@ public:
 
 private:
     float zFar;
+    float pov;
 
 };
 
 class camera2D: public camera {
 public:
     camera2D(float zFar);
+    ~camera2D()=default;
 
     void calculate() override;
     glm::mat4 getProjection() override;

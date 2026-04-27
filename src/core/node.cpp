@@ -7,9 +7,9 @@
 
 static App& app=App::instance();
 
-node::node(){
-
-};
+node::~node(){
+    
+}
 
 void node::changeMesh(Mesh* mesh){
     this->mesh=mesh;

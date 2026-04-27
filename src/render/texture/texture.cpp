@@ -23,6 +23,10 @@ Texture2D::Texture2D(char* sourceFile){
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+Texture2D::~Texture2D(){
+    glDeleteTextures(1,&id);
+}
+
 void Texture2D::bind(){
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, id);

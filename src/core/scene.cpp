@@ -3,6 +3,10 @@
 #include "Mesh.hpp"
 #include <stdlib.h>
 
+scene::~scene(){
+    
+}
+
 void scene::drawScene(){
     for(int i = 0;i<Nodes.size();i++)
         Nodes[i]->getMesh()->draw();

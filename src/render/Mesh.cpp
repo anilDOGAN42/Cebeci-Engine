@@ -18,6 +18,10 @@ Mesh::Mesh(std::vector<vertex> verticies){
     this->changeVerticies(&this->verticies);
 }
 
+Mesh::~Mesh(){
+    delete transforms;
+}
+
 void Mesh::changeNode(node* Node){
     this->Node=Node;
 }
@@ -30,7 +34,7 @@ void Mesh::draw(){
     std::vector<glm::mat4> Transforms;
     node* parent=this->Node;
 
-    camera* cam=app.getActiveScene().getActiveCamera();
+    camera* cam=app.getActiveScene()->getActiveCamera();
 
     do {
         Transforms.push_back(*(parent->getTransform()));

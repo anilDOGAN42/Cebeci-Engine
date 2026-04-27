@@ -6,6 +6,7 @@
 class SSBO{
 public:
     SSBO(unsigned int slot);
+    ~SSBO();
 
     template<typename T,typename ST>
     void changeData(std::vector<T> *Data){

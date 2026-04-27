@@ -1,14 +1,15 @@
 #include "application.hpp"
+#include "ObjectManager.hpp"
 #include "TaskManager.hpp"
 #include "scene.hpp"
 #include "shader.hpp"
 #include "Input.hpp"
 #include "stbi_impl.hpp"
 
-App::App(){}
-App::~App(){
-    //Destroy all of the objects and close the program normally. 
+App::App(){
+    objectManager=&ObjectManager::instance();
 }
+App::~App()=default;
 
 App& App::instance() {
     static App instance;
@@ -25,6 +26,7 @@ void App::changeWindowRatio(float ratio){
 }
 
 void App::init(char* name,int windowWidth,int windowHeight){
+    
     if (glfwInit()) {
         initLog = initLog | 0b10000000;
     }
@@ -78,8 +80,8 @@ void App::setActiveScene(int sceneId){
     taskManager.runStartTasks();
 
 }
-scene App::getActiveScene(){
-    return *activeScene;
+scene* App::getActiveScene(){
+    return activeScene;
 }
 
 unsigned int App::getShaderProgramID(){
@@ -91,23 +93,26 @@ int App::run(){
     if(initLog & 0b11100000){
         activeScene=scenes[0];
 
-        Shader VertexShader(GL_VERTEX_SHADER,(char*)"./shaders/vs.glsl");
-        Shader FragmentShader(GL_FRAGMENT_SHADER,(char*)"./shaders/fs.glsl");
+        Shader* VertexShader=new Shader(GL_VERTEX_SHADER,(char*)"./shaders/vs.glsl");
+        Shader* FragmentShader=new Shader(GL_FRAGMENT_SHADER,(char*)"./shaders/fs.glsl");
 
-        VertexShader.createShader();
-        FragmentShader.createShader();
+        VertexShader->createShader();
+        FragmentShader->createShader();
 
-        VertexShader.compileShader();
-        FragmentShader.compileShader();
+        VertexShader->compileShader();
+        FragmentShader->compileShader();
 
         shaderProgram= new ShaderProgram;
 
-        shaderProgram->attachShader(VertexShader.id);
-        shaderProgram->attachShader(FragmentShader.id);
+        shaderProgram->attachShader(VertexShader->id);
+        shaderProgram->attachShader(FragmentShader->id);
 
         shaderProgram->linkProgram();
             
         shaderProgram->use();
+
+        delete VertexShader;
+        delete FragmentShader;
 
         TaskManager& taskManager=TaskManager::instance();
 
@@ -128,7 +133,8 @@ int App::run(){
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
-        //Her şeyi delete et!
+
+        objectManager->deleteAllObjects();
 
         delete shaderProgram;
 

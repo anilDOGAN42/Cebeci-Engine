@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <typeinfo>
 
 class ObjectManager{
 public:
@@ -32,16 +33,27 @@ public:
         return nullptr;
     }
 
-    std::vector<Object*>& getObjectsByType();
+    template<typename T>
+    std::vector<Object*> getObjectsByType(){
+        std::vector<Object*> objects;
+        for(Object* obj:Objects)
+            if(typeid(T).hash_code()==typeid(*obj).hash_code()) 
+                objects.push_back(obj);
+        
+        return objects;
+    }
 
     std::vector<Object*>& getObjectsByTag(std::string tagName);
 
 private:
     ObjectManager()=default;
 
-    std::vector<Object*> Objects;
-  
+    void deleteAllObjects();
 
+    size_t avaibleID=0;
+
+    std::vector<Object*> Objects;
+    
     std::map<std::string, std::vector<Object*>> ObjectsByTagList;
 
 };

@@ -7,7 +7,8 @@ class Mesh;
 
 class node: public Object{
 public:
-    node();
+    node()=default;
+    ~node();
 
     void changeMesh(Mesh* mesh);
     Mesh* getMesh();

@@ -12,10 +12,10 @@ TaskManager& TaskManager::instance(){
 }
 
 void TaskManager::getActiveScenesTasks(){
-    scene Scene= App::instance().getActiveScene();
+    scene *Scene= App::instance().getActiveScene();
 
-    this->startTasks=Scene.getStartTasks();
-    this->updateTasks=Scene.getUpdateTasks();
+    this->startTasks=Scene->getStartTasks();
+    this->updateTasks=Scene->getUpdateTasks();
 
     for(startTask* task:this->startTasks)
         task->clearDeltaTime();

@@ -1,4 +1,5 @@
 #pragma once
+#include "ObjectManager.hpp"
 #include "scene.hpp"
 #include "shader.hpp"
 #include "vector"
@@ -22,7 +23,7 @@ public:
     float getScreenRatio();
 
     void setActiveScene(int sceneId);
-    scene getActiveScene();
+    scene* getActiveScene();
     
     void addScene(scene* Scene);
 
@@ -33,6 +34,8 @@ public:
 private:
     App();
     ~App();
+
+    ObjectManager *objectManager;
 
     GLFWwindow* window;
     ShaderProgram* shaderProgram;

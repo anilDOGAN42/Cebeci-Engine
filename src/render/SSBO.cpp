@@ -7,6 +7,10 @@ SSBO::SSBO(unsigned int slot){
     glGenBuffers(1, &id);   
 }
 
+SSBO::~SSBO(){
+    glDeleteBuffers(1,&id);
+}
+
 void SSBO::use(){
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, id);
 }

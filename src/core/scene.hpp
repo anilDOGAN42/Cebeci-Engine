@@ -18,6 +18,8 @@ public:
     void addStartTask(startTask* task);
     void addUpdateTask(updateTask* task);
 
+    ~scene();
+
 private:
     std::vector<node*> Nodes;
     camera* activeCamera;

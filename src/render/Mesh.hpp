@@ -12,6 +12,7 @@ class node;
 class Mesh:public Object{
 public:
     Mesh(std::vector<vertex> verticies);
+    ~Mesh();
     void changeNode(node* Node);
 
     void draw();
