@@ -1,3 +1,4 @@
+#include "Task.hpp"
 #include <CebeciEngine.hpp>
 #include <vector>
 #include <glm/fwd.hpp>
@@ -109,7 +110,7 @@ void startFunction1(double){
 }
 
 void startFunction2(double){
-    Camera::camera3D* cam= new Camera::camera3D(100.0f,90.0f);
+    Camera::camera2D* cam= new Camera::camera2D(1.0f*(app->getScreenRatio()),-1.0f*(app->getScreenRatio()),1.0f,-1.0f,10.0f);
 
     cam->camPosition={0,0,-3};
     if(sahne2obje1==nullptr)
@@ -228,6 +229,33 @@ void updateObje1Rotation(double deltaTime){
     }
 }
 
+void updateScene2Camera(double deltaTime){
+    App::Input::Input& input = App::Input::Input::instance();
+    Camera::camera* cam = app->getActiveScene()->getActiveCamera();
+    
+    float speed = 1.5f;
+
+    float velocity = speed * (float)deltaTime;
+
+    if (input.isKeyDown(GLFW_KEY_LEFT_SHIFT)){
+        speed*=3;
+    } 
+    if (input.isKeyDown(GLFW_KEY_W)){
+        cam->camPosition.y += velocity;
+    } 
+    if (input.isKeyDown(GLFW_KEY_S)){
+        cam->camPosition.y -= velocity;
+    }
+    if (input.isKeyDown(GLFW_KEY_A)){
+
+        cam->camPosition.x += velocity;
+    }
+    if (input.isKeyDown(GLFW_KEY_D)){
+        cam->camPosition.x -= velocity;
+    }
+
+    cam->calculate();
+}
 
 int main() {
     app=&App::App::instance();
@@ -240,9 +268,11 @@ int main() {
 
 
     updateTask* cameraUpdateTask = new updateTask(cameraUpdate,true);
-    updateTask* updateSceneTask =new updateTask(updateScene,true);
+    updateTask* updateSceneTask = new updateTask(updateScene,true);
     
     updateTask* updateObje1RotationTask=new updateTask(updateObje1Rotation,true);
+
+    updateTask* updateScene2CameraTask=new updateTask(updateScene2Camera,true);
 
     sahne=new scene;
     sahne2=new scene;
@@ -253,7 +283,7 @@ int main() {
     sahne->addUpdateTask(updateObje1RotationTask);
 
     sahne2->addStartTask(startTask2);
-    sahne2->addUpdateTask(cameraUpdateTask);
+    sahne2->addUpdateTask(updateScene2CameraTask);
     sahne2->addUpdateTask(updateSceneTask);
     
     app->addScene(sahne);

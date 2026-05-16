@@ -32,7 +32,6 @@ public:
     glm::mat4 getProjection() override;
     glm::mat4 getView() override;
 
-private:
     float zFar;
     float pov;
 
@@ -40,14 +39,17 @@ private:
 
 class camera2D: public camera {
 public:
-    camera2D(float zFar);
+    camera2D(float left,float right,float top,float bottom,float zFar);
     ~camera2D()=default;
 
     void calculate() override;
     glm::mat4 getProjection() override;
     glm::mat4 getView() override;
 
-private:
+    float left;
+    float right;
+    float top;
+    float bottom;
     float zFar;
 
 };

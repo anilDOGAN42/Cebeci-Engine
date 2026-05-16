@@ -1,6 +1,8 @@
 #include "camera.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
+#include "glm/matrix.hpp"
 #include "glm/trigonometric.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -53,23 +55,16 @@ glm::mat4 camera3D::getView(){
     return view;
 }
 
+camera2D::camera2D(float left,float right,float top,float bottom,float zFar):left(left),right(right),top(top),bottom(bottom),zFar(zFar){}
+
 void camera2D::calculate() {
-    glm::vec3 forward;
 
-    float pitch = glm::radians(camRotation.x);
-    float yaw   = glm::radians(camRotation.y);
+    projection = glm::ortho<float>(left,right,bottom,top,-10.0f,zFar);
 
-    forward.x = cos(pitch) * sin(yaw);
-    forward.y = sin(pitch);
-    forward.z = cos(pitch) * cos(yaw);
-
-    forward = glm::normalize(forward);
-
-    glm::vec3 sum = camPosition + forward;
-
-    view = glm::lookAt(camPosition,sum,glm::vec3(0.0f, 1.0f, 0.0f));
-
-    projection = glm::perspective(glm::radians(45.0f), Core::App::App::instance().getScreenRatio(),0.1f,zFar);
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), camPosition) *
+    glm::rotate(glm::mat4(1.0f), glm::radians(camRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    
+    view=glm::inverse(transform);
 }
 
 glm::mat4 camera2D::getProjection(){
