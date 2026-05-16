@@ -3,6 +3,7 @@
 #include "scene.hpp"
 #include <application.hpp>
 
+namespace CebeciEngine::Core::App::Task{
 TaskManager::TaskManager(){}
 
 TaskManager& TaskManager::instance(){
@@ -34,4 +35,5 @@ void TaskManager::runUpdateTasks(){
     
     for(unsigned int i=0;i<updateTasks.size();i++)
         this->updateTasks[i]->run();
+}
 }

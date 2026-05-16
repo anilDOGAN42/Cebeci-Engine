@@ -7,6 +7,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+//forward declaration
+namespace CebeciEngine::Core{
+    namespace App::Object{class ObjectManager;}
+    class scene;
+}
+namespace CebeciEngine::Core::App {
 class App{
 public:
 
@@ -35,10 +41,10 @@ private:
     App();
     ~App();
 
-    ObjectManager *objectManager;
+    CebeciEngine::Core::App::Object::ObjectManager *objectManager;
 
     GLFWwindow* window;
-    ShaderProgram* shaderProgram;
+    Render::ShaderProgram* shaderProgram;
     std::vector<scene*> scenes;
     
     scene* activeScene;
@@ -46,3 +52,4 @@ private:
     char   initLog=0b00000000;
     //glfwInit - window init - gladLoad
 };
+}

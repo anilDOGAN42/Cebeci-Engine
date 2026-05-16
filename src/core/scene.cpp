@@ -3,6 +3,8 @@
 #include "Mesh.hpp"
 #include <stdlib.h>
 
+namespace CebeciEngine::Core {
+using namespace Render::Camera;
 scene::~scene(){
     
 }
@@ -36,4 +38,5 @@ void scene::addStartTask(startTask* task){
 }
 void scene::addUpdateTask(updateTask* task){
     this->updateTasks.push_back(task);
+}
 }

@@ -2,6 +2,8 @@
 #include "vertex.hpp"
 #include <glad/glad.h>
 
+
+namespace CebeciEngine::Render{
 class VBO{
 public:
     VBO();
@@ -13,3 +15,4 @@ public:
 private:
     size_t length;
 };
+}

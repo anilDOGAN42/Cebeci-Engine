@@ -2,14 +2,17 @@
 #include "SSBO.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
+#include "node.hpp"
 #include "texture.hpp"
 #include "vertex.hpp"
 #include <vector>
 #include <Object.hpp>
 
-class node;
-
-class Mesh:public Object{
+namespace CebeciEngine {
+namespace Core{class node;}
+using Core::node;
+namespace Render{
+class Mesh:public CebeciEngine::Core::App::Object::Object{
 public:
     Mesh(std::vector<vertex> verticies);
     ~Mesh();
@@ -17,7 +20,7 @@ public:
 
     void draw();
 
-    void changeTexture(Texture2D* texture);
+    void changeTexture(Texture::Texture2D* texture);
 
     void changeVerticies(std::vector<vertex>* verticies);
 
@@ -26,7 +29,7 @@ private:
     VAO vao;
     SSBO *transforms;
 
-    Texture2D* texture;
+    Texture::Texture2D* texture;
     
     node* Node;
 
@@ -34,3 +37,5 @@ private:
 
     unsigned int shaderProgram;
 };
+}
+}

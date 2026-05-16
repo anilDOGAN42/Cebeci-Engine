@@ -2,6 +2,7 @@
 #include "Task.hpp"
 #include <vector>
 
+namespace CebeciEngine::Core::App::Task{
 class TaskManager{
 public:
     static TaskManager& instance();
@@ -21,3 +22,4 @@ private:
     std::vector<startTask*> startTasks;
 
 };
+}

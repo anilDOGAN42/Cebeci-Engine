@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <string>
 
+namespace CebeciEngine::Render{
 class Shader {
 public:
     Shader(GLenum shaderType, char* sourceFile);
@@ -26,3 +27,4 @@ public:
     unsigned int id;
     ~ShaderProgram();
 };
+}

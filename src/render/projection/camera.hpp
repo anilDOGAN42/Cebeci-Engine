@@ -4,7 +4,8 @@
 #include <glad/glad.h>
 #include <Object.hpp>
 
-class camera:public Object{
+namespace CebeciEngine::Render::Camera{
+class camera:public CebeciEngine::Core::App::Object::Object{
 public:
     virtual void calculate();
 
@@ -50,3 +51,4 @@ private:
     float zFar;
 
 };
+}

@@ -1,6 +1,6 @@
 #include "Task.hpp"
 
-
+namespace CebeciEngine::Core::App::Task{
 Task::Task(void(*func)(double deltaTime),bool isActive){
     this->func=func;
     this->active=isActive;
@@ -21,3 +21,4 @@ void Task::deactivate(){
 
 updateTask::updateTask(void(*func)(double deltaTime),bool isActive):Task(func,isActive){}
 startTask::startTask(void(*func)(double deltaTime),bool isActive):Task(func,isActive){}
+}

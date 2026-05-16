@@ -3,6 +3,7 @@
 #include <vector>
 #include <glad/glad.h>
 
+namespace CebeciEngine::Render{
 class SSBO{
 public:
     SSBO(unsigned int slot);
@@ -28,3 +29,4 @@ public:
     unsigned int id;
     unsigned int slot;
 };
+}

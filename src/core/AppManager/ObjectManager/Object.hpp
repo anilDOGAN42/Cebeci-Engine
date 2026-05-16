@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+namespace CebeciEngine::Core::App::Object {
 class Object{
 public:
     unsigned long int id;
@@ -18,3 +19,4 @@ public:
 
     
 };
+}

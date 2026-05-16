@@ -1,23 +1,14 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <CebeciEngine.hpp>
 #include <vector>
-#include "Mesh.hpp"
-#include "ObjectManager.hpp"
-#include "TaskManager/Task.hpp"
-#include "camera.hpp"
-#include "glm/fwd.hpp"
-#include "texture.hpp"
-#include "vector.hpp"
-#include "vertex.hpp"
-#include "node.hpp"
-#include "scene.hpp"
-#include "application.hpp"
-#include "Input.hpp"
-#include "texture.hpp"
+#include <glm/fwd.hpp>
+
+using namespace CebeciEngine;
+using namespace CebeciEngine::Core;
+using namespace CebeciEngine::Render;
 
 static bool a=false,b=false;
 
-static App* app;
+static App::App* app;
 
 static scene* sahne;
 static scene* sahne2;
@@ -28,7 +19,7 @@ static node* obje2=nullptr;
 static node* sahne2obje1=nullptr;
 
 void startFunction1(double){
-    camera3D* cam= new camera3D(100.0f,45.0f);
+    Camera::camera3D* cam= new Camera::camera3D(100.0f,45.0f);
 
     cam->camPosition={0,0,-3};
     if(obje1==nullptr)
@@ -41,7 +32,7 @@ void startFunction1(double){
 
     cam->calculate();
 
-    Texture2D* doku= new Texture2D((char*)"./textures/doku2.png");
+    Texture::Texture2D* doku= new Texture::Texture2D((char*)"./textures/doku2.png");
 
     std::vector<vertex> mesh={
         vertex{{-0.5,-0.5,-0.5},{0,0}},
@@ -99,8 +90,8 @@ void startFunction1(double){
     obje1Mesh->name="mesh";
 
     obje1->changeMesh(obje1Mesh);
-    ObjectManager& objectManager=
-    ObjectManager::instance();
+    App::Object::ObjectManager& objectManager=
+    App::Object::ObjectManager::instance();
 
     Mesh* obje2Mesh = new Mesh(mesh);
     obje2Mesh->changeTexture(doku);
@@ -118,7 +109,7 @@ void startFunction1(double){
 }
 
 void startFunction2(double){
-    camera3D* cam= new camera3D(100.0f,90.0f);
+    Camera::camera3D* cam= new Camera::camera3D(100.0f,90.0f);
 
     cam->camPosition={0,0,-3};
     if(sahne2obje1==nullptr)
@@ -126,9 +117,9 @@ void startFunction2(double){
 
     cam->calculate();
 
-    Texture2D* doku= new Texture2D((char*)"./textures/doku2.png");
+    Texture::Texture2D* doku= new Texture::Texture2D((char*)"./textures/doku2.png");
 
-    sahne2obje1->changeMesh(ObjectManager::instance().getObject<Mesh>("mesh"));
+    sahne2obje1->changeMesh(App::Object::ObjectManager::instance().getObject<Mesh>("mesh"));
     sahne2obje1->getMesh()->changeTexture(doku);
 
     sahne2->addNode(sahne2obje1);
@@ -137,8 +128,8 @@ void startFunction2(double){
 }
 
 void cameraUpdate(double deltaTime) {
-    Input& input = Input::instance();
-    camera* cam = app->getActiveScene()->getActiveCamera();
+    App::Input::Input& input = App::Input::Input::instance();
+    Camera::camera* cam = app->getActiveScene()->getActiveCamera();
 
     float speed = 1.5f;
 
@@ -192,8 +183,8 @@ void cameraUpdate(double deltaTime) {
 }
 
 void updateScene(double deltaTime){
-    App& app=App::instance();
-    auto& input = Input::instance();
+    App::App& app=App::App::instance();
+    auto& input = App::Input::Input::instance();
     if(input.isKeyPressed(GLFW_KEY_BACKSPACE))
     {
         if(!a){
@@ -210,7 +201,7 @@ void updateScene(double deltaTime){
 }
 
 void updateObje1Rotation(double deltaTime){
-    Input& input=Input::instance();
+    App::Input::Input& input=App::Input::Input::instance();
 
     if (input.isKeyDown(GLFW_KEY_Z)){
         obje1->getTransform()->Rotation={0,0,0};
@@ -239,7 +230,7 @@ void updateObje1Rotation(double deltaTime){
 
 
 int main() {
-    app=&App::instance();
+    app=&App::App::instance();
 
     app->init((char*)"Game", 800, 800);
 

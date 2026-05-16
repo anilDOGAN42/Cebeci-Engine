@@ -2,6 +2,7 @@
 #include "texture.hpp"
 #include <glad/glad.h>
 
+namespace CebeciEngine::Render::Texture{
 Texture2D::Texture2D(char* sourceFile){
 
     glGenTextures(1, &id);
@@ -30,4 +31,5 @@ Texture2D::~Texture2D(){
 void Texture2D::bind(){
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, id);
+}
 }

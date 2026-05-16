@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <unordered_map>
 
+namespace CebeciEngine::Core::App::Input {
 class Input {
 public:
     static Input& instance();
@@ -38,3 +39,4 @@ private:
     double prevMouseX = 0, prevMouseY = 0;
     double tempPrevMouseX = 0, tempPrevMouseY = 0;
 };
+}

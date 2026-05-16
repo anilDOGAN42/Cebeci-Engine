@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+namespace CebeciEngine::Render{
 Shader::Shader(GLenum shaderType, char* sourceFile) {
     id = glCreateShader(shaderType);
 
@@ -54,4 +55,5 @@ void ShaderProgram::use(){
 ShaderProgram::~ShaderProgram(){
     if(id!=0)
         glDeleteProgram(id);
+}
 }

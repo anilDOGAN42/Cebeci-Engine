@@ -4,6 +4,7 @@
 
 using Clock = std::chrono::steady_clock;
 
+namespace CebeciEngine::Core::App::Task{
 class Task{
 public:
     Task(void(*func)(double deltaTime),bool isActive);
@@ -58,3 +59,4 @@ public:
         }
     }
 };
+}

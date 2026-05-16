@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "application.hpp"
 
+namespace CebeciEngine::Render::Camera{
 void camera::calculate() {}
 
 camera::~camera(){
@@ -41,7 +42,7 @@ void camera3D::calculate() {
 
     view = glm::lookAt(camPosition,sum,glm::vec3(0.0f, 1.0f, 0.0f));
 
-    projection = glm::perspective(glm::radians(pov), App::instance().getScreenRatio(),0.1f,zFar);
+    projection = glm::perspective(glm::radians(pov), Core::App::App::instance().getScreenRatio(),0.1f,zFar);
 }
 
 glm::mat4 camera3D::getProjection(){
@@ -68,7 +69,7 @@ void camera2D::calculate() {
 
     view = glm::lookAt(camPosition,sum,glm::vec3(0.0f, 1.0f, 0.0f));
 
-    projection = glm::perspective(glm::radians(45.0f), App::instance().getScreenRatio(),0.1f,zFar);
+    projection = glm::perspective(glm::radians(45.0f), Core::App::App::instance().getScreenRatio(),0.1f,zFar);
 }
 
 glm::mat4 camera2D::getProjection(){
@@ -77,4 +78,5 @@ glm::mat4 camera2D::getProjection(){
 
 glm::mat4 camera2D::getView(){
     return view;
+}
 }

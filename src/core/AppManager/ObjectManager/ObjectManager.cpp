@@ -1,8 +1,9 @@
-#include <ObjectManager.hpp>
+#include "ObjectManager.hpp"
 #include <Object.hpp>
 #include <string.h>
 #include <vector>
 
+namespace CebeciEngine::Core::App::Object {
 ObjectManager& ObjectManager::instance(){
     static ObjectManager instance;
     return instance;
@@ -45,4 +46,5 @@ void ObjectManager::deleteAllObjects(){
 
 std::vector<Object*>& ObjectManager::getObjectsByTag(std::string tagName){
     return ObjectsByTagList[tagName];
+}
 }

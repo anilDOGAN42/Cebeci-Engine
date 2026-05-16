@@ -2,6 +2,7 @@
 #include "vertex.hpp"
 #include <cstddef>
 
+namespace CebeciEngine::Render{
 VAO::VAO(){
     glGenVertexArrays(1,&id);
 }
@@ -23,4 +24,5 @@ void VAO::attribute(){
 VAO::~VAO(){
     if(id!=0)
         glDeleteVertexArrays(1,&id);
+}
 }

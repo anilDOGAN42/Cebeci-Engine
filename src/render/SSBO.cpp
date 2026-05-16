@@ -1,6 +1,7 @@
 #include "SSBO.hpp"
 #include <glad/glad.h>
 
+namespace CebeciEngine::Render{
 SSBO::SSBO(unsigned int slot){
     this->slot=slot;
 
@@ -17,4 +18,5 @@ void SSBO::use(){
 
 void SSBO::bind(){
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, slot, id);
+}
 }

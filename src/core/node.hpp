@@ -1,11 +1,15 @@
 #pragma once
 #include <Object.hpp>
+//#include "application.hpp"
+#include "Mesh.hpp"
 #include "transform.hpp"
 #include <vector>
 
-class Mesh;
-
-class node: public Object{
+namespace CebeciEngine {
+namespace Render {class Mesh;}
+using Render::Mesh;
+namespace Core {
+class node: public App::Object::Object{
 public:
     node()=default;
     ~node();
@@ -28,3 +32,5 @@ private:
     transform Transform;
     Mesh* mesh;
 };
+}
+}

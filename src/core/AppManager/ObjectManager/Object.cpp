@@ -3,8 +3,9 @@
 #include <algorithm>
 #include <vector>
 
-static ObjectManager& objectManager=ObjectManager::instance();
+static CebeciEngine::Core::App::Object::ObjectManager& objectManager=CebeciEngine::Core::App::Object::ObjectManager::instance();
 
+namespace CebeciEngine::Core::App::Object {
 Object::Object(){
     objectManager.addObject(this);
 }
@@ -41,4 +42,5 @@ bool Object::removeTag(std::string tagName){
     tagList.erase(objectAtTagList);
 
     return true;
+}
 }

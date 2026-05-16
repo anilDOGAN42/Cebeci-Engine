@@ -8,8 +8,9 @@
 #include <vector>
 #include "application.hpp"
 
-static App& app=App::instance();
+static CebeciEngine::Core::App::App& app=CebeciEngine::Core::App::App::instance();
 
+namespace CebeciEngine::Render {
 Mesh::Mesh(std::vector<vertex> verticies){
     transforms=new SSBO(0);
     this->shaderProgram=app.getShaderProgramID();
@@ -26,7 +27,7 @@ void Mesh::changeNode(node* Node){
     this->Node=Node;
 }
 
-void Mesh::changeTexture(Texture2D* texture){
+void Mesh::changeTexture(Texture::Texture2D* texture){
     this->texture=texture;
 }
 
@@ -34,7 +35,7 @@ void Mesh::draw(){
     std::vector<glm::mat4> Transforms;
     node* parent=this->Node;
 
-    camera* cam=app.getActiveScene()->getActiveCamera();
+    Camera::camera* cam=app.getActiveScene()->getActiveCamera();
 
     do {
         Transforms.push_back(*(parent->getTransform()));
@@ -66,4 +67,5 @@ void Mesh::changeVerticies(std::vector<vertex>* verticies){
     vao.use();
     vbo.changeData(verticies->data(), verticies->size());
     vao.attribute();
+}
 }

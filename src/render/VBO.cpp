@@ -1,6 +1,7 @@
 #include "VBO.hpp"
 #include "vertex.hpp"
 
+namespace CebeciEngine::Render{
 VBO::VBO(){
     glGenBuffers(1,&id);
 
@@ -23,4 +24,5 @@ void VBO::changeData(vertex* Data,size_t length){
 
 void VBO::draw(){
     glDrawArrays(GL_TRIANGLES,0,length);
+}
 }

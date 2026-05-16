@@ -6,8 +6,10 @@
 #include "Input.hpp"
 #include "stbi_impl.hpp"
 
+using namespace CebeciEngine::Render;
+namespace CebeciEngine::Core::App {
 App::App(){
-    objectManager=&ObjectManager::instance();
+    objectManager=&Object::ObjectManager::instance();
 }
 App::~App()=default;
 
@@ -60,7 +62,7 @@ void App::init(char* name,int windowWidth,int windowHeight){
     }
 
     screenRatio=(float)windowWidth/(float)windowHeight;
-    Input::instance().init(window);
+    Input::Input::instance().init(window);
     
     stbi_init();
 }
@@ -89,7 +91,7 @@ unsigned int App::getShaderProgramID(){
 }
 
 int App::run(){
-    Input& input= Input::instance();
+    Input::Input& input= Input::Input::instance();
     if(initLog & 0b11100000){
         activeScene=scenes[0];
 
@@ -145,4 +147,5 @@ int App::run(){
     else{
         return -1;
     }
+}
 }

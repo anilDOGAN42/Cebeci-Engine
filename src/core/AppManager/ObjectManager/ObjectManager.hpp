@@ -1,15 +1,18 @@
 #pragma once
+#include "application.hpp"
 #include <Object.hpp>
 #include <vector>
 #include <string>
 #include <map>
 #include <typeinfo>
 
+namespace CebeciEngine::Core::App{class App;};//forward declaration
+namespace CebeciEngine::Core::App::Object {
 class ObjectManager{
 public:
     static ObjectManager& instance();
-    friend class App;
-    friend class Object;
+    friend class CebeciEngine::Core::App::App;
+    friend class CebeciEngine::Core::App::Object::Object;
 
     ObjectManager(const ObjectManager&) = delete;
     ObjectManager& operator=(const ObjectManager&) = delete;
@@ -57,3 +60,4 @@ private:
     std::map<std::string, std::vector<Object*>> ObjectsByTagList;
 
 };
+}

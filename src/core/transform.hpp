@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector.hpp>
 
+namespace CebeciEngine::Core {
 class transform{
 public:
     transform();
@@ -29,3 +30,5 @@ public:
     }
 };//Buna iyi bir ayar çekmek lazım
 // Quaternion kullanmamız lazım
+}
+

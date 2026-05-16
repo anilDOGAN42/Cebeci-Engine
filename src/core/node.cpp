@@ -5,7 +5,8 @@
 #include <vector>
 #include "application.hpp"
 
-static App& app=App::instance();
+static CebeciEngine::Core::App::App& app=CebeciEngine::Core::App::App::instance();
+namespace CebeciEngine::Core {
 
 node::~node(){
     
@@ -35,4 +36,5 @@ transform* node::getTransform(){
 
 void node::addChild(node* Child){
     this->childs.push_back(Child);
+}
 }

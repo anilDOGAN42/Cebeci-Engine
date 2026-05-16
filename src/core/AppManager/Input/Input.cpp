@@ -1,7 +1,8 @@
 #include "Input.hpp"
 #include "GLFW/glfw3.h"
-#include <iostream>
 
+
+namespace CebeciEngine::Core::App::Input {
 Input& Input::instance() {
     static Input i;
     return i;
@@ -71,4 +72,5 @@ void Input::keyCallback(GLFWwindow*, int key, int, int action, int) {
 void Input::cursorCallback(GLFWwindow*, double xpos, double ypos) {
     instance().mouseX = xpos;
     instance().mouseY = ypos;
+}
 }
