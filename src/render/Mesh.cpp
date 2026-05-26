@@ -1,4 +1,5 @@
 #include <Mesh.hpp>
+#include "ObjectManager.hpp"
 #include "SSBO.hpp"
 #include "VBO.hpp"
 #include "camera.hpp"
@@ -7,11 +8,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include "application.hpp"
+#include "transform.hpp"
 
 static CebeciEngine::Core::App::App& app=CebeciEngine::Core::App::App::instance();
 
 namespace CebeciEngine::Render {
 Mesh::Mesh(std::vector<vertex> verticies){
+    isSingleton=true;
     transforms=new SSBO(0);
     this->shaderProgram=app.getShaderProgramID();
 
@@ -23,9 +26,6 @@ Mesh::~Mesh(){
     delete transforms;
 }
 
-void Mesh::changeNode(node* Node){
-    this->Node=Node;
-}
 
 void Mesh::changeTexture(Texture::Texture2D* texture){
     this->texture=texture;
@@ -33,13 +33,17 @@ void Mesh::changeTexture(Texture::Texture2D* texture){
 
 void Mesh::draw(){
     std::vector<glm::mat4> Transforms;
-    node* parent=this->Node;
+    node* parent=dynamic_cast<node*>(this->getParent());
 
     Camera::camera* cam=app.getActiveScene()->getActiveCamera();
 
     do {
-        Transforms.push_back(*(parent->getTransform()));
-        parent=parent->getParent();
+        Transforms.push_back(*(parent)->getComponentByType<Core::transform>());
+        Object* p=parent->getParent();
+        if(p!=nullptr){
+            parent=dynamic_cast<node*>(p);
+        }
+        else break;
     }while(parent!=nullptr);
 
     transforms->changeData<glm::mat4,glm::mat4>(&Transforms);

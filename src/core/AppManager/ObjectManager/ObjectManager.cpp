@@ -35,11 +35,10 @@ void ObjectManager::removeObject(Object* object){
 }
 
 
-void ObjectManager::deleteAllObjects(){
-    unsigned int totalObjects=Objects.size();
-    
-    for(unsigned int i=0;i<totalObjects;i++){
+void ObjectManager::deleteAllObjects(){    
+    while(Objects.size()!=0){
         Object* obj=Objects[0];
+
         delete obj;
     }
 }

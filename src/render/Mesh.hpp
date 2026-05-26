@@ -16,7 +16,6 @@ class Mesh:public CebeciEngine::Core::App::Object::Object{
 public:
     Mesh(std::vector<vertex> verticies);
     ~Mesh();
-    void changeNode(node* Node);
 
     void draw();
 
@@ -31,8 +30,6 @@ private:
 
     Texture::Texture2D* texture;
     
-    node* Node;
-
     std::vector<vertex> verticies;
 
     unsigned int shaderProgram;

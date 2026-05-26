@@ -1,4 +1,6 @@
+#include "Mesh.hpp"
 #include "Task.hpp"
+#include "transform.hpp"
 #include <CebeciEngine.hpp>
 #include <vector>
 #include <glm/fwd.hpp>
@@ -19,23 +21,7 @@ static node* obje2=nullptr;
 
 static node* sahne2obje1=nullptr;
 
-void startFunction1(double){
-    Camera::camera3D* cam= new Camera::camera3D(100.0f,45.0f);
-
-    cam->camPosition={0,0,-3};
-    if(obje1==nullptr)
-        obje1=new node;
-    if(obje2==nullptr)
-        obje2=new node;
-
-    obje1->name="obje1";
-    obje2->name="obje2";
-
-    cam->calculate();
-
-    Texture::Texture2D* doku= new Texture::Texture2D((char*)"./textures/doku2.png");
-
-    std::vector<vertex> mesh={
+static std::vector<vertex> mesh={
         vertex{{-0.5,-0.5,-0.5},{0,0}},
         vertex{{-0.5,0.5,-0.5},{0,1}},
         vertex{{0.5,-0.5,-0.5},{1,0}},
@@ -83,25 +69,42 @@ void startFunction1(double){
         vertex{{0.5,0.5,0.5},{1,1}},
         vertex{{0.5,-0.5,0.5},{1,0}},
 
-    };
+};
+
+void startFunction1(double){
+    Camera::camera3D* cam= new Camera::camera3D(100.0f,45.0f);
+
+    cam->camPosition={0,0,-3};
+    if(obje1==nullptr)
+        obje1=new node;
+    if(obje2==nullptr)
+        obje2=new node;
+
+    obje1->name="obje1";
+    obje2->name="obje2";
+
+    cam->calculate();
+
+    Texture::Texture2D* obje1doku= new Texture::Texture2D((char*)"./textures/doku2.png");
+    Texture::Texture2D* obje2doku= new Texture::Texture2D((char*)"./textures/doku2.png");
 
     Mesh* obje1Mesh = new Mesh(mesh);
-    obje1Mesh->changeTexture(doku);
+    obje1Mesh->changeTexture(obje1doku);
 
     obje1Mesh->name="mesh";
 
-    obje1->changeMesh(obje1Mesh);
+    obje1->addComponent(obje1Mesh);
     App::Object::ObjectManager& objectManager=
     App::Object::ObjectManager::instance();
 
     Mesh* obje2Mesh = new Mesh(mesh);
-    obje2Mesh->changeTexture(doku);
+    obje2Mesh->changeTexture(obje2doku);
 
-    obje2->changeMesh(obje2Mesh);
+    obje2->addComponent(obje2Mesh);
 
     obje2->setParent(obje1);
 
-    obje2->getTransform()->Position={3,0,0};
+    obje2->getComponentByType<transform>()->Position={3,0,0};
 
     sahne->addNode(obje1);
     sahne->addNode(obje2);
@@ -120,8 +123,10 @@ void startFunction2(double){
 
     Texture::Texture2D* doku= new Texture::Texture2D((char*)"./textures/doku2.png");
 
-    sahne2obje1->changeMesh(App::Object::ObjectManager::instance().getObject<Mesh>("mesh"));
-    sahne2obje1->getMesh()->changeTexture(doku);
+    Mesh* sahne2obje1Mesh=new Mesh(mesh);
+
+    sahne2obje1->addComponent(sahne2obje1Mesh);
+    sahne2obje1->getComponentByType<Mesh>()->changeTexture(doku);
 
     sahne2->addNode(sahne2obje1);
 
@@ -205,27 +210,27 @@ void updateObje1Rotation(double deltaTime){
     App::Input::Input& input=App::Input::Input::instance();
 
     if (input.isKeyDown(GLFW_KEY_Z)){
-        obje1->getTransform()->Rotation={0,0,0};
-        obje2->getTransform()->Rotation={0,0,0};
+        obje1->getComponentByType<transform>()->Rotation={0,0,0};
+        obje2->getComponentByType<transform>()->Rotation={0,0,0};
     }
 
     if (input.isKeyDown(GLFW_KEY_UP)){
-        obje1->getTransform()->Rotation.z+=10*deltaTime;
+        obje1->getComponentByType<transform>()->Rotation.z+=10*deltaTime;
     }
     if (input.isKeyDown(GLFW_KEY_DOWN)){
-        obje1->getTransform()->Rotation.z-=10*deltaTime;
+        obje1->getComponentByType<transform>()->Rotation.z-=10*deltaTime;
     }
     if (input.isKeyDown(GLFW_KEY_LEFT)){
-        obje1->getTransform()->Rotation.y+=10*deltaTime;
+        obje1->getComponentByType<transform>()->Rotation.y+=10*deltaTime;
     }
     if (input.isKeyDown(GLFW_KEY_RIGHT)){
-        obje1->getTransform()->Rotation.y-=10*deltaTime;
+        obje1->getComponentByType<transform>()->Rotation.y-=10*deltaTime;
     }
     if (input.isKeyDown(GLFW_KEY_Q)){
-        obje1->getTransform()->Rotation.x+=10*deltaTime;
+        obje1->getComponentByType<transform>()->Rotation.x+=10*deltaTime;
     }
     if (input.isKeyDown(GLFW_KEY_E)){
-        obje1->getTransform()->Rotation.x-=10*deltaTime;
+        obje1->getComponentByType<transform>()->Rotation.x-=10*deltaTime;
     }
 }
 
@@ -236,6 +241,17 @@ void updateScene2Camera(double deltaTime){
     float speed = 1.5f;
 
     float velocity = speed * (float)deltaTime;
+
+    if(input.isKeyPressed(GLFW_KEY_ESCAPE)){
+        if(b){
+            b=false;
+            input.lockMouse();
+        }
+        else{
+            b=true;
+            input.freeMouse();
+        }
+    }
 
     if (input.isKeyDown(GLFW_KEY_LEFT_SHIFT)){
         speed*=3;
@@ -261,7 +277,6 @@ int main() {
     app=&App::App::instance();
 
     app->init((char*)"Game", 800, 800);
-
 
     startTask* startTask1= new startTask(startFunction1,true);
     startTask* startTask2= new startTask(startFunction2,true);

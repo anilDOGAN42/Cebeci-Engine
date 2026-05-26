@@ -28,7 +28,7 @@ public:
 
     float getScreenRatio();
 
-    void setActiveScene(int sceneId);
+    bool setActiveScene(int sceneId);
     scene* getActiveScene();
     
     void addScene(scene* Scene);
@@ -51,5 +51,8 @@ private:
     float  screenRatio;
     char   initLog=0b00000000;
     //glfwInit - window init - gladLoad
+
+    bool fault=false;
+    char* faultLog=nullptr;
 };
 }

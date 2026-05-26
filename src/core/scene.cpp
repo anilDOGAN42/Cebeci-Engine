@@ -10,8 +10,10 @@ scene::~scene(){
 }
 
 void scene::drawScene(){
-    for(int i = 0;i<Nodes.size();i++)
-        Nodes[i]->getMesh()->draw();
+    for(int i = 0;i<Nodes.size();i++){
+        Mesh* mesh=Nodes[i]->getComponentByType<Mesh>();
+        if(mesh) mesh->draw();
+    }
 }
 
 void scene::addNode(node* Node){

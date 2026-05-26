@@ -1,4 +1,5 @@
 #pragma once
+#include "Object.hpp"
 #include <glm/fwd.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/glm.hpp>
@@ -6,7 +7,7 @@
 #include <vector.hpp>
 
 namespace CebeciEngine::Core {
-class transform{
+class transform:public App::Object::Object{
 public:
     transform();
 

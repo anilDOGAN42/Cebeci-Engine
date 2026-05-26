@@ -5,6 +5,7 @@
 #include "shader.hpp"
 #include "Input.hpp"
 #include "stbi_impl.hpp"
+#include <iostream>
 
 using namespace CebeciEngine::Render;
 namespace CebeciEngine::Core::App {
@@ -75,12 +76,15 @@ void App::addScene(scene* Scene){
     scenes.push_back(Scene);
 }
 
-void App::setActiveScene(int sceneId){
+bool App::setActiveScene(int sceneId){
+    if(sceneId>=scenes.size()) return false;
+
     activeScene=scenes.data()[sceneId];
     TaskManager &taskManager=TaskManager::instance();
     taskManager.getActiveScenesTasks();
     taskManager.runStartTasks();
-
+    
+    return true;
 }
 scene* App::getActiveScene(){
     return activeScene;
@@ -91,6 +95,7 @@ unsigned int App::getShaderProgramID(){
 }
 
 int App::run(){
+    if(fault) return 1;
     Input::Input& input= Input::Input::instance();
     if(initLog & 0b11100000){
         activeScene=scenes[0];
@@ -121,7 +126,7 @@ int App::run(){
         taskManager.getActiveScenesTasks();
         taskManager.runStartTasks();
 
-        while (!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(window) && !fault) {
 
             glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -134,6 +139,11 @@ int App::run(){
 
             glfwSwapBuffers(window);
             glfwPollEvents();
+        }
+
+        if(fault){
+            if(faultLog!=nullptr)
+            std::cerr<<faultLog;
         }
 
         objectManager->deleteAllObjects();

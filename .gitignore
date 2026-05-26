@@ -1,0 +1,11 @@
+*
+
+!/src/
+!/src/**
+
+!/Game/
+!/Game/**
+
+/src/glad.c
+
+!.gitignore
