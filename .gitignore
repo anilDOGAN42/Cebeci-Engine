@@ -9,3 +9,4 @@
 /src/glad.c
 
 !.gitignore
+!LICENSE
