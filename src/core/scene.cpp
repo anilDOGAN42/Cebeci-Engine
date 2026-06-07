@@ -1,4 +1,5 @@
 #include "scene.hpp"
+#include "TaskManager.hpp"
 #include "camera.hpp"
 #include "Mesh.hpp"
 #include <stdlib.h>
@@ -36,9 +37,15 @@ std::vector<updateTask*> scene::getUpdateTasks(){
 }
 
 void scene::addStartTask(startTask* task){
+    TaskManager& taskManager=TaskManager::instance();
     this->startTasks.push_back(task);
+    if(App::App::instance().getActiveScene()==this)
+        taskManager.addStartTask(task);
 }
 void scene::addUpdateTask(updateTask* task){
+    TaskManager& taskManager=TaskManager::instance();
     this->updateTasks.push_back(task);
-}
+    if(App::App::instance().getActiveScene()==this)
+        taskManager.addUpdateTask(task);
+}  
 }

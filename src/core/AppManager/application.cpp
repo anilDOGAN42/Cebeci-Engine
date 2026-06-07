@@ -123,11 +123,16 @@ int App::run(){
 
         TaskManager& taskManager=TaskManager::instance();
 
+
         taskManager.getActiveScenesTasks();
         taskManager.runStartTasks();
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         while (!glfwWindowShouldClose(window) && !fault) {
 
+            //Yeni tasklar çalışmalı sadece
             glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

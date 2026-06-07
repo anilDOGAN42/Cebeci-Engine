@@ -12,8 +12,12 @@ public:
 
     void getActiveScenesTasks();
 
+    void addUpdateTask(updateTask* task);
+    void addStartTask(startTask* task);
+
     void runUpdateTasks();
     void runStartTasks();
+
 
 private:
     TaskManager();

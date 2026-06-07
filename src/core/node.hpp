@@ -1,7 +1,6 @@
 #pragma once
 #include <Object.hpp>
 #include "Mesh.hpp"
-
 namespace CebeciEngine {
 namespace Render {class Mesh;}
 using Render::Mesh;
@@ -12,9 +11,8 @@ public:
     node();
     ~node()=default;
 
-
     
-
+    
 };
 }
 }

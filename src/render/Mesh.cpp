@@ -72,4 +72,8 @@ void Mesh::changeVerticies(std::vector<vertex>* verticies){
     vbo.changeData(verticies->data(), verticies->size());
     vao.attribute();
 }
+
+std::vector<vertex>* Mesh::getVerticies(){
+    return &this->verticies;
+}
 }

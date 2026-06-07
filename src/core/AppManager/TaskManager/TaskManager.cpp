@@ -26,6 +26,14 @@ void TaskManager::getActiveScenesTasks(){
 
 }
 
+
+void TaskManager::addUpdateTask(updateTask* task){
+    updateTasks.push_back(task);
+}
+void TaskManager::addStartTask(startTask* task){
+    startTasks.push_back(task);
+}
+
 void TaskManager::runStartTasks(){
     for(unsigned int i=0;i<startTasks.size();i++)
         this->startTasks[i]->run();

@@ -85,7 +85,7 @@ void startFunction1(double){
 
     cam->calculate();
 
-    Texture::Texture2D* obje1doku= new Texture::Texture2D((char*)"./textures/doku2.png");
+    Texture::Texture2D* obje1doku= new Texture::Texture2D((char*)"./textures/doku1.png");
     Texture::Texture2D* obje2doku= new Texture::Texture2D((char*)"./textures/doku2.png");
 
     Mesh* obje1Mesh = new Mesh(mesh);
@@ -121,7 +121,7 @@ void startFunction2(double){
 
     cam->calculate();
 
-    Texture::Texture2D* doku= new Texture::Texture2D((char*)"./textures/doku2.png");
+    Texture::Texture2D* doku= new Texture::Texture2D((char*)"./textures/doku1.png");
 
     Mesh* sahne2obje1Mesh=new Mesh(mesh);
 

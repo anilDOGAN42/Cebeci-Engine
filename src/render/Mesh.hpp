@@ -23,11 +23,14 @@ public:
 
     void changeVerticies(std::vector<vertex>* verticies);
 
-private:
+    std::vector<vertex>* getVerticies();
+
+
     VBO vbo;
     VAO vao;
     SSBO *transforms;
 
+private:
     Texture::Texture2D* texture;
     
     std::vector<vertex> verticies;

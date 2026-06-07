@@ -13,11 +13,4 @@ node::node(){
     this->addComponent(Transform);
 }
 
-/*void node::changeMesh(Mesh* mesh){
-    mesh->changeNode(this);
-    this->addComponent(mesh);
-}*/
-
-
-
 }
