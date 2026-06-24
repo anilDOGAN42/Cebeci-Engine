@@ -6,8 +6,9 @@
 
 namespace CebeciEngine::Core {
 using namespace Render::Camera;
-scene::~scene(){
-    
+
+scene::scene(){
+    this->isNodeComponent=false;
 }
 
 void scene::drawScene(){

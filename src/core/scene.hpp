@@ -11,6 +11,8 @@ namespace CebeciEngine::Core {
 class node;
 class scene:public App::Object::Object{
 public:
+
+
     void addNode(node* Node);
     void drawScene();
     
@@ -23,7 +25,8 @@ public:
     void addStartTask(startTask* task);
     void addUpdateTask(updateTask* task);
 
-    ~scene();
+    scene();
+    ~scene()=default;
 
 private:
     std::vector<node*> Nodes;

@@ -12,7 +12,6 @@ public:
     ~node()=default;
 
     
-    
 };
 }
 }

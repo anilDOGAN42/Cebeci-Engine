@@ -52,5 +52,6 @@
 
     protected:
         bool isSingleton=false;
+        bool isNodeComponent=true;
     };
     }
