@@ -1,4 +1,6 @@
 
+![](Logo.png)
+
 ## About This Project
 
 Cebeci Engine does not enforce any specific build system (like CMake, Make, or Visual Studio solutions). We believe in absolute development freedom; you should not be restricted by our build configurations. 
