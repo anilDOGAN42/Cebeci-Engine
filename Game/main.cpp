@@ -1,7 +1,6 @@
-#include "Mesh.hpp"
-#include "Task.hpp"
-#include "transform.hpp"
 #include <CebeciEngine.hpp>
+#include "Input.hpp"
+#include "transform.hpp"
 #include <vector>
 #include <glm/fwd.hpp>
 
@@ -73,6 +72,8 @@ static std::vector<vertex> mesh={
 
 void startFunction1(double){
     Camera::camera3D* cam= new Camera::camera3D(100.0f,45.0f);
+
+    App::Input::Input::instance().lockMouse();
 
     cam->camPosition={0,0,-3};
     if(obje1==nullptr)
@@ -155,7 +156,7 @@ void cameraUpdate(double deltaTime) {
 
     right = glm::normalize(glm::cross(forward, glm::vec3(0,1,0)));
 
-    if(input.isKeyPressed(GLFW_KEY_ESCAPE)){
+    if(input.isKeyPressed(KEY_ESCAPE)){
         if(b){
             b=false;
             input.lockMouse();
@@ -165,20 +166,20 @@ void cameraUpdate(double deltaTime) {
             input.freeMouse();
         }
     }
-    if (input.isKeyDown(GLFW_KEY_LEFT_SHIFT)){
+    if (input.isKeyDown(KEY_LEFT_SHIFT)){
         speed*=3;
     } 
-    if (input.isKeyDown(GLFW_KEY_W)){
+    if (input.isKeyDown(KEY_W)){
         cam->camPosition += forward * (float)(speed * deltaTime);
     } 
-    if (input.isKeyDown(GLFW_KEY_S)){
+    if (input.isKeyDown(KEY_S)){
         cam->camPosition -= forward * (float)(speed * deltaTime);
     }
-    if (input.isKeyDown(GLFW_KEY_A)){
+    if (input.isKeyDown(KEY_A)){
 
         cam->camPosition -= right * (float)(speed * deltaTime);
     }
-    if (input.isKeyDown(GLFW_KEY_D)){
+    if (input.isKeyDown(KEY_D)){
         cam->camPosition += right * (float)(speed * deltaTime);
     }
 
@@ -191,7 +192,7 @@ void cameraUpdate(double deltaTime) {
 void updateScene(double deltaTime){
     App::App& app=App::App::instance();
     auto& input = App::Input::Input::instance();
-    if(input.isKeyPressed(GLFW_KEY_BACKSPACE))
+    if(input.isKeyPressed(KEY_BACKSPACE))
     {
         if(!a){
             a=true;
@@ -209,27 +210,27 @@ void updateScene(double deltaTime){
 void updateObje1Rotation(double deltaTime){
     App::Input::Input& input=App::Input::Input::instance();
 
-    if (input.isKeyDown(GLFW_KEY_Z)){
+    if (input.isKeyDown(KEY_Z)){
         obje1->getComponentByType<transform>()->Rotation={0,0,0};
         obje2->getComponentByType<transform>()->Rotation={0,0,0};
     }
 
-    if (input.isKeyDown(GLFW_KEY_UP)){
+    if (input.isKeyDown(KEY_UP)){
         obje1->getComponentByType<transform>()->Rotation.z+=10*deltaTime;
     }
-    if (input.isKeyDown(GLFW_KEY_DOWN)){
+    if (input.isKeyDown(KEY_DOWN)){
         obje1->getComponentByType<transform>()->Rotation.z-=10*deltaTime;
     }
-    if (input.isKeyDown(GLFW_KEY_LEFT)){
+    if (input.isKeyDown(KEY_LEFT)){
         obje1->getComponentByType<transform>()->Rotation.y+=10*deltaTime;
     }
-    if (input.isKeyDown(GLFW_KEY_RIGHT)){
+    if (input.isKeyDown(KEY_RIGHT)){
         obje1->getComponentByType<transform>()->Rotation.y-=10*deltaTime;
     }
-    if (input.isKeyDown(GLFW_KEY_Q)){
+    if (input.isKeyDown(KEY_Q)){
         obje1->getComponentByType<transform>()->Rotation.x+=10*deltaTime;
     }
-    if (input.isKeyDown(GLFW_KEY_E)){
+    if (input.isKeyDown(KEY_E)){
         obje1->getComponentByType<transform>()->Rotation.x-=10*deltaTime;
     }
 }
@@ -242,7 +243,7 @@ void updateScene2Camera(double deltaTime){
 
     float velocity = speed * (float)deltaTime;
 
-    if(input.isKeyPressed(GLFW_KEY_ESCAPE)){
+    if(input.isKeyPressed(KEY_ESCAPE)){
         if(b){
             b=false;
             input.lockMouse();
@@ -253,20 +254,20 @@ void updateScene2Camera(double deltaTime){
         }
     }
 
-    if (input.isKeyDown(GLFW_KEY_LEFT_SHIFT)){
+    if (input.isKeyDown(KEY_LEFT_SHIFT)){
         speed*=3;
     } 
-    if (input.isKeyDown(GLFW_KEY_W)){
+    if (input.isKeyDown(KEY_W)){
         cam->camPosition.y += velocity;
     } 
-    if (input.isKeyDown(GLFW_KEY_S)){
+    if (input.isKeyDown(KEY_S)){
         cam->camPosition.y -= velocity;
     }
-    if (input.isKeyDown(GLFW_KEY_A)){
+    if (input.isKeyDown(KEY_A)){
 
         cam->camPosition.x += velocity;
     }
-    if (input.isKeyDown(GLFW_KEY_D)){
+    if (input.isKeyDown(KEY_D)){
         cam->camPosition.x -= velocity;
     }
 
