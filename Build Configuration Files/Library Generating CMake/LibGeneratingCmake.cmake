@@ -9,7 +9,7 @@ file(GLOB_RECURSE render_source CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sr
 add_library(core SHARED ${core_source})
 add_library(render SHARED ${render_source})
 
-target_link_libraries(core PUBLIC ${dependencies_libs} render)
+target_link_libraries(core PUBLIC render)
 target_link_libraries(render PUBLIC glfw)
 
 include_directories(
@@ -24,4 +24,5 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/AppManager/TaskManager"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/AppManager/ObjectManager"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/Math"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/core/NodeManager"
 )

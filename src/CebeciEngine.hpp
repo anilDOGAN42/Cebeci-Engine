@@ -9,7 +9,7 @@
 #include <render/texture/texture.hpp>
 #include <core/Math/vector.hpp>
 #include <render/vertex.hpp>
-#include <core/node.hpp>
+#include <core/NodeManager/node.hpp>
 #include <core/scene.hpp>
 #include <core/AppManager/application.hpp>
 #include <core/AppManager/Input/Input.hpp>

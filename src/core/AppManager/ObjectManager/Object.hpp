@@ -43,6 +43,7 @@
         }
 
         Object* getParent();
+        bool canBeAddedToNode();
         
         bool setParent(Object* parent);
         

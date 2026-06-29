@@ -97,6 +97,10 @@ Object* Object::getComponent(unsigned int id){
     return nullptr;
 }
 
+bool Object::canBeAddedToNode(){
+    return isNodeComponent;
+}
+
 Object* Object::getParent(){
     return parent;
 }

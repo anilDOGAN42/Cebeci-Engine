@@ -11,7 +11,7 @@ public:
     node();
     ~node()=default;
 
-    
+    bool addComponent(Object* component);
 };
 }
 }

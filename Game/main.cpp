@@ -187,6 +187,7 @@ void cameraUpdate(double deltaTime) {
     cam->camRotation.x -= input.getMouseDY() * deltaTime*2;
 
     cam->calculate();
+    
 }
 
 void updateScene(double deltaTime){
