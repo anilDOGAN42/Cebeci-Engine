@@ -35,7 +35,7 @@ void Mesh::draw(){
     std::vector<glm::mat4> Transforms;
     node* parent=dynamic_cast<node*>(this->getParent());
 
-    Camera::camera* cam=app.getActiveScene()->getActiveCamera();
+    Camera::camera* cam=app.getActiveScenes().at(0)->getActiveCamera();
 
     do {
         Transforms.push_back(*(parent)->getComponentByType<Core::transform>());
@@ -55,11 +55,15 @@ void Mesh::draw(){
     GLint uTextureLoc=glGetUniformLocation(shaderProgram, "uTexture");
     glUniform1i(uTextureLoc,0);
 
+    cam->lock();
+
     GLint projection = glGetUniformLocation(shaderProgram, "projection");    
     glUniformMatrix4fv(projection,1,GL_FALSE,glm::value_ptr(cam->getProjection()));
 
     GLint view = glGetUniformLocation(shaderProgram, "view");    
     glUniformMatrix4fv(view,1,GL_FALSE,glm::value_ptr(cam->getView()));
+
+    cam->unlock();
 
     texture->bind();
 

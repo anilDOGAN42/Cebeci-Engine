@@ -1,8 +1,18 @@
 #pragma once
 #include "Task.hpp"
+#include "Thread.hpp"
+#include "application.hpp"
+#include <string>
+#include <thread>
 #include <vector>
 
-namespace CebeciEngine::Core::App::Task{
+
+
+
+namespace CebeciEngine::Core::App{
+class App;
+namespace Task{
+
 class TaskManager{
 public:
     static TaskManager& instance();
@@ -10,20 +20,32 @@ public:
     TaskManager(const TaskManager&) = delete;
     TaskManager& operator=(const TaskManager&) = delete;
 
-    void getActiveScenesTasks();
+    Threading::Thread* createThread(std::string name);
 
-    void addUpdateTask(updateTask* task);
-    void addStartTask(startTask* task);
+    void deleteThread(std::string name);
+    void deleteThread(std::thread::id id);
 
-    void runUpdateTasks();
-    void runStartTasks();
+    Threading::Thread* getThread(std::thread::id id);
+    Threading::Thread* getThread(std::string name);
 
+
+    void addTaskToMainThread(Task* task);
+
+    void addTaskToThread(Task* task,std::thread::id threadId);
+    void addTaskToThread(Task* task,std::string threadName);
 
 private:
-    TaskManager();
+    TaskManager()=default;
 
-    std::vector<updateTask*> updateTasks;
-    std::vector<startTask*> startTasks;
+    friend class CebeciEngine::Core::App::App;
 
+    void initMainThread();
+    void deleteAllThreads();
+
+    std::thread::id MainThreadId{};
+
+    std::vector<Threading::Thread*> Threads;
+    std::vector<Task*> MainThreadTasks;
 };
+}
 }

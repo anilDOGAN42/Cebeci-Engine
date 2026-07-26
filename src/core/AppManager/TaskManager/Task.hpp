@@ -1,62 +1,36 @@
 #pragma once
+#include "Object.hpp"
 #include <chrono>
+#include <thread>
 
 
 using Clock = std::chrono::steady_clock;
 
 namespace CebeciEngine::Core::App::Task{
-class Task{
+class Task:Object::Object{
 public:
-    Task(void(*func)(double deltaTime),bool isActive);
-
+    
     virtual void activate();
     virtual void deactivate();
 
+    void run();
+
+    std::thread::id getTaskThreadId();
+    void setTaskThreadId(std::thread::id id);
+
     virtual void clearDeltaTime();
 
-    virtual void run()=0;
 protected:
-    void(*func)(double deltaTime);
-
+    virtual void Update(double deltaTime){}
+    virtual void Start(){}
+    virtual void Init(){}
+    
     Clock::time_point lastTime = Clock::now();
 
     bool active;
-};
+    bool Init_Function_Ran=false;
+    bool Start_Function_Ran=false;
 
-class updateTask: public Task{
-public:
-    updateTask(void(*func)(double deltaTime),bool isActive);
-    void run() override{
-        if(active){
-            Clock::time_point now = Clock::now();
-
-            double deltaTime =std::chrono::duration<double>(now-lastTime).count();
-
-            this->lastTime = now;
-                
-            func(deltaTime);
-        }
-    }
-};
-
-class startTask: public Task{
-public:
-    startTask(void(*func)(double deltaTime),bool isActive);
-    void run() override{
-        if(active){
-            func(0);
-        }
-    }
-};
-
-
-class sceneInitTask: public Task{
-public:
-    sceneInitTask(void(*func)(double deltaTime),bool isActive);
-    void run() override{
-        if(active){
-            func(0);
-        }
-    }
+    std::thread::id taskThread{};
 };
 }

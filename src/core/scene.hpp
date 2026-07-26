@@ -14,16 +14,18 @@ public:
 
 
     void addNode(node* Node);
+    void removeNode(node* Node);
+
     void drawScene();
     
     void setCamera(Render::Camera::camera* camera);
     Render::Camera::camera* getActiveCamera();
 
-    std::vector<startTask*> getStartTasks();
-    std::vector<updateTask*> getUpdateTasks();
+    std::vector<Task*>& getTasks();
+    void addTask(Task* task);
 
-    void addStartTask(startTask* task);
-    void addUpdateTask(updateTask* task);
+    void removeTask(Task* task);
+    void removeTask(size_t taskID);
 
     scene();
     ~scene()=default;
@@ -32,8 +34,7 @@ private:
     std::vector<node*> Nodes;
     Render::Camera::camera* activeCamera;
 
-    std::vector<updateTask*> updateTasks;
-    std::vector<startTask*> startTasks;
+    std::vector<Task*> Tasks;
     
 };
 }

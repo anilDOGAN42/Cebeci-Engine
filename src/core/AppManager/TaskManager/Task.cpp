@@ -1,10 +1,7 @@
 #include "Task.hpp"
+#include <thread>
 
 namespace CebeciEngine::Core::App::Task{
-Task::Task(void(*func)(double deltaTime),bool isActive){
-    this->func=func;
-    this->active=isActive;
-}
 
 void Task::clearDeltaTime(){
     this->lastTime=Clock::now();
@@ -19,6 +16,25 @@ void Task::deactivate(){
     this->active=false;
 }
 
-updateTask::updateTask(void(*func)(double deltaTime),bool isActive):Task(func,isActive){}
-startTask::startTask(void(*func)(double deltaTime),bool isActive):Task(func,isActive){}
+void Task::run(){
+    if(!active) return;
+    if(!Init_Function_Ran) {Init();  Init_Function_Ran=true; }
+    if(!Start_Function_Ran){Start(); Start_Function_Ran=true;}
+
+    Clock::time_point now=Clock::now();
+
+    double seconds = std::chrono::duration<double>(now-lastTime).count();
+
+    Update(seconds);
+    lastTime=now;
+
+}
+
+std::thread::id Task::getTaskThreadId(){
+    return this->taskThread;
+}
+void Task::setTaskThreadId(std::thread::id id){
+    this->taskThread=id;
+}
+
 }

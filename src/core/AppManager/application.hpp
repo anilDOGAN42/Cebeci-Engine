@@ -1,5 +1,6 @@
 #pragma once
 #include "ObjectManager.hpp"
+#include "TaskManager.hpp"
 #include "scene.hpp"
 #include "shader.hpp"
 #include "vector"
@@ -28,10 +29,13 @@ public:
 
     float getScreenRatio();
 
-    bool setActiveScene(int sceneId);
-    scene* getActiveScene();
+    bool isSceneActive(unsigned int sceneId);
+    bool activateScene(unsigned int sceneId);
+    bool deactivateScene(unsigned int sceneId);
     
-    void addScene(scene* Scene);
+    std::vector<scene*>& getActiveScenes();
+    
+    unsigned int addScene(scene* Scene);
 
     void changeWindowRatio(float ratio);
 
@@ -41,13 +45,11 @@ private:
     App();
     ~App();
 
-    CebeciEngine::Core::App::Object::ObjectManager *objectManager;
-
     GLFWwindow* window;
     Render::ShaderProgram* shaderProgram;
     std::vector<scene*> scenes;
-    
-    scene* activeScene;
+    std::vector<scene*> activeScenes;
+
     float  screenRatio;
     char   initLog=0b00000000;
     //glfwInit - window init - gladLoad

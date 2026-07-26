@@ -1,10 +1,13 @@
 #include "TaskManager.hpp"
 #include "Task.hpp"
-#include "scene.hpp"
+#include "Thread.hpp"
 #include <application.hpp>
+#include <iostream>
+#include <thread>
 
 namespace CebeciEngine::Core::App::Task{
-TaskManager::TaskManager(){}
+
+using Threading::Thread;
 
 TaskManager& TaskManager::instance(){
     static TaskManager instance;
@@ -12,36 +15,93 @@ TaskManager& TaskManager::instance(){
     
 }
 
-void TaskManager::getActiveScenesTasks(){
-    scene *Scene= App::instance().getActiveScene();
+void TaskManager::initMainThread(){
+    this->MainThreadId=std::this_thread::get_id();
+}
 
-    this->startTasks=Scene->getStartTasks();
-    this->updateTasks=Scene->getUpdateTasks();
+void TaskManager::deleteAllThreads(){
+    for(Thread* thread:this->Threads){
+        delete thread;
+    }
+}
 
-    for(startTask* task:this->startTasks)
-        task->clearDeltaTime();
+Threading::Thread* TaskManager::createThread(std::string name){
+    Thread* newThread=new Thread(name);
 
-    for(updateTask* task:this->updateTasks)
-        task->clearDeltaTime();
+    this->Threads.push_back(newThread);
+
+    return newThread;
+}
+
+void TaskManager::deleteThread(std::string name){
+    Thread* thread=getThread(name);
+
+    if(!thread) return;
+
+    for(size_t i=0;i<Threads.size();i++){
+        if(Threads.at(i)==thread){
+            Threads.erase(Threads.begin()+i);
+        }
+    }
+
+    delete thread;
+}
+
+void TaskManager::deleteThread(std::thread::id id){
+    Thread* thread=getThread(id);
+
+    if(!thread) return;
+
+    for(size_t i=0;i<Threads.size();i++){
+        if(Threads.at(i)==thread){
+            Threads.erase(Threads.begin()+i);
+        }
+    }
+
+    delete thread;
+}
+
+Thread* TaskManager::getThread(std::thread::id id){
+    for(Thread* thread:Threads){
+        if(thread->id==id) return thread;
+    }
+    return nullptr;
+}
+Thread* TaskManager::getThread(std::string name){
+    for(Thread* thread:Threads){
+        if(thread->name==name) return thread;
+    }
+    return nullptr;
+}
+
+void TaskManager::addTaskToMainThread(Task* task){
+    task->setTaskThreadId(MainThreadId);
+
+    this->MainThreadTasks.push_back(task);
 
 }
 
+void TaskManager::addTaskToThread(Task* task,std::thread::id threadId){
+    task->setTaskThreadId((std::thread::id)threadId);
 
-void TaskManager::addUpdateTask(updateTask* task){
-    updateTasks.push_back(task);
-}
-void TaskManager::addStartTask(startTask* task){
-    startTasks.push_back(task);
-}
+    Thread* thread=this->getThread(threadId);
 
-void TaskManager::runStartTasks(){
-    for(unsigned int i=0;i<startTasks.size();i++)
-        this->startTasks[i]->run();
+    thread->addTaskToThread(task);
+
 }
 
-void TaskManager::runUpdateTasks(){
-    
-    for(unsigned int i=0;i<updateTasks.size();i++)
-        this->updateTasks[i]->run();
+void TaskManager::addTaskToThread(Task* task,std::string name){
+    Thread* thread=getThread(name);
+
+    if(thread==nullptr){
+        std::cerr<<"Thread is null!\n";
+        return;
+    }
+
+    task->setTaskThreadId((std::thread::id)thread->id);
+
+    thread->addTaskToThread(task);
+
 }
+
 }

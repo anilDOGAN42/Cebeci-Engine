@@ -1,17 +1,22 @@
 #include "application.hpp"
 #include "ObjectManager.hpp"
+#include "Task.hpp"
 #include "TaskManager.hpp"
+#include "Thread.hpp"
 #include "scene.hpp"
 #include "shader.hpp"
 #include "Input.hpp"
 #include "stbi_impl.hpp"
 #include <iostream>
+#include <vector>
 
 using namespace CebeciEngine::Render;
+using CebeciEngine::Core::App::Object::ObjectManager;
+TaskManager& taskManager=TaskManager::instance();
+ObjectManager& objectManager=ObjectManager::instance();
 namespace CebeciEngine::Core::App {
-App::App(){
-    objectManager=&Object::ObjectManager::instance();
-}
+
+App::App()=default;
 App::~App()=default;
 
 App& App::instance() {
@@ -66,28 +71,46 @@ void App::init(char* name,int windowWidth,int windowHeight){
     Input::Input::instance().init(window);
     
     stbi_init();
+    taskManager.initMainThread();
+
 }
 
 float App::getScreenRatio(){
     return screenRatio;
 }
 
-void App::addScene(scene* Scene){
+unsigned int App::addScene(scene* Scene){
     scenes.push_back(Scene);
+    return scenes.size()-1;
 }
 
-bool App::setActiveScene(int sceneId){
-    if(sceneId>=scenes.size()) return false;
-
-    activeScene=scenes.data()[sceneId];
-    TaskManager &taskManager=TaskManager::instance();
-    taskManager.getActiveScenesTasks();
-    taskManager.runStartTasks();
+bool App::isSceneActive(unsigned int sceneId){
+    for(scene* Scene: activeScenes)
+        if(Scene->id==sceneId) return true; 
     
+    return false;
+}
+
+bool App::activateScene(unsigned int sceneId){
+    if(sceneId>=scenes.size() || isSceneActive(sceneId)) return false;
+
+    activeScenes.push_back(scenes.at(sceneId));
+
     return true;
 }
-scene* App::getActiveScene(){
-    return activeScene;
+bool App::deactivateScene(unsigned int sceneId){
+    if(isSceneActive(sceneId)){
+        for(unsigned int i=0;i<activeScenes.size();i++)
+            if(activeScenes.at(i)->id==sceneId)
+                activeScenes.erase(activeScenes.begin()+i);
+    
+        return true;
+    }else{
+        return false;
+    }
+}
+std::vector<scene*>& App::getActiveScenes(){
+    return activeScenes;
 }
 
 unsigned int App::getShaderProgramID(){
@@ -98,8 +121,6 @@ int App::run(){
     if(fault) return 1;
     Input::Input& input= Input::Input::instance();
     if(initLog & 0b11100000){
-        activeScene=scenes[0];
-
         Shader* VertexShader=new Shader(GL_VERTEX_SHADER,(char*)"./shaders/vs.glsl");
         Shader* FragmentShader=new Shader(GL_FRAGMENT_SHADER,(char*)"./shaders/fs.glsl");
 
@@ -121,26 +142,23 @@ int App::run(){
         delete VertexShader;
         delete FragmentShader;
 
-        TaskManager& taskManager=TaskManager::instance();
-
-
-        taskManager.getActiveScenesTasks();
-        taskManager.runStartTasks();
-
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        while (!glfwWindowShouldClose(window) && !fault) {
+        glfwSwapBuffers(window);
+        glfwPollEvents();
 
-            //Yeni tasklar çalışmalı sadece
+        while (!glfwWindowShouldClose(window) && !fault) {
             glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             input.update();
 
-            taskManager.runUpdateTasks();
-        
-            activeScene->drawScene();
+            for(Task::Task* task:taskManager.MainThreadTasks){
+                task->run();
+            }
+    
+            activeScenes[0]->drawScene();    
 
             glfwSwapBuffers(window);
             glfwPollEvents();
@@ -151,7 +169,8 @@ int App::run(){
             std::cerr<<faultLog;
         }
 
-        objectManager->deleteAllObjects();
+        taskManager.deleteAllThreads();
+        objectManager.deleteAllObjects();
 
         delete shaderProgram;
 
@@ -164,3 +183,4 @@ int App::run(){
     }
 }
 }
+
