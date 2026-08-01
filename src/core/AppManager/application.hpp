@@ -37,7 +37,7 @@ public:
     
     unsigned int addScene(scene* Scene);
 
-    void changeWindowRatio(float ratio);
+    void changeScreenRatio(float ratio);
 
     int run();
 
@@ -47,10 +47,14 @@ private:
 
     GLFWwindow* window;
     Render::ShaderProgram* shaderProgram;
+
+    std::mutex scenesMutex;
     std::vector<scene*> scenes;
+
+    std::mutex activeScenesMutex;
     std::vector<scene*> activeScenes;
 
-    float  screenRatio;
+    std::atomic<float>  screenRatio;
     char   initLog=0b00000000;
     //glfwInit - window init - gladLoad
 

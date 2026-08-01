@@ -10,32 +10,44 @@ ObjectManager& ObjectManager::instance(){
 }
 
 void ObjectManager::addObject(Object* object){
+    ObjectsMutex.lock();
+
     Objects.push_back(object);
     for(std::string tag:object->tags){
-        ObjectsByTagList[tag].push_back(object);
+        ObjectsByTag[tag].push_back(object);
     }
 
     object->id=this->avaibleID;
     this->avaibleID++;
+
+    ObjectsMutex.unlock();
 }
 
 void ObjectManager::removeObject(Object* object){
+    ObjectsMutex.lock();
+
     for(size_t i=0;i<Objects.size();i++){
         if(Objects.at(i)==object){
             Objects.erase(Objects.begin()+i);
         }
     }
+    ObjectsMutex.unlock();
+    
+
+    ObjectsByTagMutex.lock();
+
     for(std::string tag:object->tags){
-        std::vector<Object*> list=ObjectsByTagList[tag];
+        std::vector<Object*> list=ObjectsByTag[tag];
         for(size_t i=0;i<list.size();i++){
             if(list[i]==object)
                 list.erase(list.begin()+i);
         }
     }
+    ObjectsByTagMutex.unlock();
 }
 
 
-void ObjectManager::deleteAllObjects(){    
+void ObjectManager::deleteAllObjects(){   
     while(Objects.size()!=0){
         Object* obj=Objects[0];
 
@@ -44,6 +56,10 @@ void ObjectManager::deleteAllObjects(){
 }
 
 std::vector<Object*>& ObjectManager::getObjectsByTag(std::string tagName){
-    return ObjectsByTagList[tagName];
+    ObjectsByTagMutex.lock();
+
+    return ObjectsByTag[tagName];
+
+    ObjectsByTagMutex.unlock();
 }
 }

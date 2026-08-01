@@ -1,5 +1,6 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include <mutex>
 #include <unordered_map>
 // keyboard
 #define KEY_SPACE   32 
@@ -169,9 +170,10 @@ private:
 
     GLFWwindow* window;
 
-
     static void keyCallback(GLFWwindow*, int key, int scancode, int action, int mods);
     static void cursorCallback(GLFWwindow*, double xpos, double ypos);
+
+    std::mutex inputMutex;
 
     std::unordered_map<int, bool> currentKeys;
     std::unordered_map<int, bool> tempPreviousKeys;

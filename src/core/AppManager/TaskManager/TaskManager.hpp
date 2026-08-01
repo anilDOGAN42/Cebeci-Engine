@@ -2,12 +2,10 @@
 #include "Task.hpp"
 #include "Thread.hpp"
 #include "application.hpp"
+#include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
-
-
-
 
 namespace CebeciEngine::Core::App{
 class App;
@@ -44,7 +42,10 @@ private:
 
     std::thread::id MainThreadId{};
 
+    std::mutex ThreadsMutex;
     std::vector<Threading::Thread*> Threads;
+
+    std::mutex MainThreadTasksMutex;
     std::vector<Task*> MainThreadTasks;
 };
 }

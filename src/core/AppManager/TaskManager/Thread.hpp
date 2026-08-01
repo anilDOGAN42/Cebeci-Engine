@@ -1,7 +1,6 @@
 #pragma once
 #include "Task.hpp"
 #include <atomic>
-#include <condition_variable>
 #include <mutex>
 #include <thread>
 #include <vector>
@@ -25,7 +24,6 @@ private:
     
     std::atomic<bool> is_running{false};
     std::mutex tasks_mutex;
-    std::condition_variable cv;
 
     std::vector<Task*> tasks;
 

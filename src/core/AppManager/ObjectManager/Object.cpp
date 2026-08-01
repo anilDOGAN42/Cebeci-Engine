@@ -32,7 +32,7 @@ Object::~Object(){
 void Object::addTag(std::string tagName){
     this->tags.push_back(tagName);
 
-    objectManager.ObjectsByTagList[tagName].push_back(this);
+    objectManager.ObjectsByTag[tagName].push_back(this);
 }
 
 
@@ -45,7 +45,7 @@ bool Object::removeTag(std::string tagName){
 
     this->tags.erase(tag);
 
-    std::vector<Object*>& tagList=objectManager.ObjectsByTagList[tagName];
+    std::vector<Object*>& tagList=objectManager.ObjectsByTag[tagName];
 
     auto objectAtTagList=std::find(tagList.begin(),tagList.end(),this);
 

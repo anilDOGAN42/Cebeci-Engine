@@ -76,11 +76,69 @@ static std::vector<vertex> mesh={
         vertex{{0.5,-0.5,0.5},{1,0}},
 
 };
-
-class AThreadTask:public Task{
+class CameraUpdate:public Task{
+public:
     void Update(double deltaTime) override{
+        App::Input::Input& input = App::Input::Input::instance();
+
+        float speed = 1.5f;
+
         cam->lock();
-        cam->camPosition.z+=1*deltaTime;
+        glm::vec3 camRotation=cam->camRotation;
+        glm::vec3 camPosition=cam->camPosition;
+        cam->unlock();
+
+        glm::vec3 forward,right;
+
+        float pitch = glm::radians(camRotation.x);
+        float yaw   = glm::radians(camRotation.y);
+
+        forward.x = cos(pitch) * sin(yaw);
+        forward.y = sin(pitch);
+        forward.z = cos(pitch) * cos(yaw);
+
+        forward = glm::normalize(forward);
+
+        right = glm::normalize(glm::cross(forward, glm::vec3(0,1,0)));
+
+        if(input.isKeyPressed(KEY_ESCAPE)){
+            if(b){
+                b=false;
+                input.lockMouse();
+            }
+            else{
+                b=true;
+                input.freeMouse();
+            }
+        }
+        if (input.isKeyDown(KEY_LEFT_SHIFT)){
+            speed*=3;
+        } 
+        if (input.isKeyDown(KEY_W)){
+            cam->lock();
+            cam->camPosition += forward * (float)(speed * deltaTime);
+            cam->unlock();
+        } 
+        if (input.isKeyDown(KEY_S)){
+            cam->lock();
+            cam->camPosition -= forward * (float)(speed * deltaTime);
+            cam->unlock();
+        }
+        if (input.isKeyDown(KEY_A)){
+            cam->lock();
+            cam->camPosition -= right * (float)(speed * deltaTime);
+            cam->unlock();
+        }
+        if (input.isKeyDown(KEY_D)){
+            cam->lock();
+            cam->camPosition += right * (float)(speed * deltaTime);
+            cam->unlock();
+        }
+
+        cam->lock();
+        cam->camRotation.y -= input.getMouseDX() * deltaTime*2;
+        cam->camRotation.x -= input.getMouseDY() * deltaTime*2;
+
         cam->calculate();
         cam->unlock();
     }
@@ -117,16 +175,13 @@ public:
         
         TaskManager& taskManager=TaskManager::instance();
 
-        AThreadTask *task=new AThreadTask;
+        CameraUpdate *task=new CameraUpdate;
         task->activate();
 
-        Threading::Thread* thread=taskManager.createThread("A");
-        taskManager.addTaskToThread(task,thread->getId());
+        taskManager.addTaskToMainThread(task);
 
     }
-
-    void Update(double deltaTime) override{
-    }
+    
 };
 
 int main() {
@@ -141,5 +196,6 @@ int main() {
     TaskManager::instance().addTaskToMainThread(InitTask);
     
     app->run();
+
     return 0;
 }

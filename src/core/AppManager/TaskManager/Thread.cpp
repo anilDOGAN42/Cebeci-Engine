@@ -14,7 +14,6 @@
 
         Thread::~Thread() {
             is_running = false;
-            cv.notify_all();
             if (thread.joinable()) {
                 thread.join();
             }
@@ -24,51 +23,34 @@
             this->id = std::this_thread::get_id();
 
             while (is_running) {
-                std::vector<Task*> tasks_to_run;
-
-                {
-                    std::unique_lock<std::mutex> lock(tasks_mutex);
-                    
-                        cv.wait(lock, [this]() {
-                        return !tasks.empty() || !is_running;
-                    });
-                    
-                    if (!is_running) break;
-
-                    tasks_to_run = tasks; 
-
-                }
-
-                for (Task* task : tasks_to_run) {
+                tasks_mutex.lock();
+                for (Task* task : tasks) {
                     if (task) {
                         task->run();
                     }
                 }
-
+                tasks_mutex.unlock();
                 std::this_thread::yield();
             }
         }
 
         void Thread::addTaskToThread(Task* task) {
             if (!task) return;
-
-            {
-                std::lock_guard<std::mutex> lock(tasks_mutex);
-                this->tasks.push_back(task);
-            }
-            
-
-            cv.notify_one(); 
+            tasks_mutex.lock();
+            this->tasks.push_back(task);
+            tasks_mutex.unlock();
         }
 
         void Thread::removeTaskFromThread(Task* task) {
-            std::lock_guard<std::mutex> lock(tasks_mutex);
+            tasks_mutex.lock();
             for (auto it = tasks.begin(); it != tasks.end(); ++it) {
                 if (*it == task) {
                     tasks.erase(it);
+                    tasks_mutex.unlock();
                     break;
                 }
             }
+            tasks_mutex.unlock();
         }
 
         std::thread::id Thread::getId() {

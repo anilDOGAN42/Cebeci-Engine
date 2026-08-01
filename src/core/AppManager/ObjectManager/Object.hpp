@@ -8,7 +8,7 @@
 namespace CebeciEngine::Core::App::Object {
     
 template<typename T>
-class ObjectLock;
+class ObjectPointer;
 class Object{
 public:
     unsigned long int id;

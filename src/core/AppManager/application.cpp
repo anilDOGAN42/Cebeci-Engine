@@ -26,10 +26,10 @@ App& App::instance() {
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
-    App::instance().changeWindowRatio((float)width/(float)height);
+    App::instance().changeScreenRatio((float)width/(float)height);
 }
 
-void App::changeWindowRatio(float ratio){
+void App::changeScreenRatio(float ratio){
     screenRatio=ratio;
 }
 
@@ -85,25 +85,33 @@ unsigned int App::addScene(scene* Scene){
 }
 
 bool App::isSceneActive(unsigned int sceneId){
+    activeScenesMutex.lock();
     for(scene* Scene: activeScenes)
-        if(Scene->id==sceneId) return true; 
-    
+        if(Scene->id==sceneId){
+            activeScenesMutex.unlock();
+            return true;
+        }
+    activeScenesMutex.unlock();
     return false;
 }
 
 bool App::activateScene(unsigned int sceneId){
     if(sceneId>=scenes.size() || isSceneActive(sceneId)) return false;
 
+    activeScenesMutex.lock();
     activeScenes.push_back(scenes.at(sceneId));
+    activeScenesMutex.unlock();
 
     return true;
 }
 bool App::deactivateScene(unsigned int sceneId){
     if(isSceneActive(sceneId)){
+        activeScenesMutex.lock();
         for(unsigned int i=0;i<activeScenes.size();i++)
             if(activeScenes.at(i)->id==sceneId)
                 activeScenes.erase(activeScenes.begin()+i);
-    
+        
+        activeScenesMutex.unlock();
         return true;
     }else{
         return false;

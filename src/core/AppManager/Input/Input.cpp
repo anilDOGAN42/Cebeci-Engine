@@ -15,6 +15,7 @@ void Input::init(GLFWwindow* window) {
 }
 
 void Input::update() {
+    inputMutex.lock();
 
     previousKeys=tempPreviousKeys;
     prevMouseX=tempPrevMouseX;
@@ -24,34 +25,58 @@ void Input::update() {
     tempPrevMouseX = mouseX;
     tempPrevMouseY = mouseY;
 
+    inputMutex.unlock();
 }
 
 bool Input::isKeyDown(int key) {
-    return currentKeys[key];
+    inputMutex.lock();
+    bool down = currentKeys[key];
+    inputMutex.unlock();
+
+    return down;
 }
 
 bool Input::isKeyPressed(int key) {
-    return currentKeys[key] && !previousKeys[key];
+    inputMutex.lock();
+    bool pressed = currentKeys[key] && !previousKeys[key];
+    inputMutex.unlock();
+
+    return pressed;
 }
 
 bool Input::isKeyReleased(int key) {
-    return !currentKeys[key] && previousKeys[key];
+    inputMutex.lock();
+    bool released = !currentKeys[key] && previousKeys[key];
+    inputMutex.unlock();
+
+    return released;
 }
 
 double Input::getMouseX() {
-    return mouseX; 
+    inputMutex.lock();
+    double mX = mouseX; 
+    inputMutex.unlock();
+    return mX;
+
 }
 
 double Input::getMouseY() {
-    return mouseY; 
+    inputMutex.lock();
+    double mY = mouseY; 
+    inputMutex.unlock();
+    return mY;
 }
 
 double Input::getMouseDX() { 
+    inputMutex.lock();
     double DX = mouseX - prevMouseX;
+    inputMutex.unlock();
     return DX;
 }
 double Input::getMouseDY() { 
+    inputMutex.lock();
     double DY = mouseY - prevMouseY;
+    inputMutex.unlock();
     return DY;
 }
 
@@ -70,7 +95,11 @@ void Input::keyCallback(GLFWwindow*, int key, int, int action, int) {
 }
 
 void Input::cursorCallback(GLFWwindow*, double xpos, double ypos) {
-    instance().mouseX = xpos;
-    instance().mouseY = ypos;
+    Input& input=instance();
+    
+    input.inputMutex.lock();
+    input.mouseX = xpos;
+    input.mouseY = ypos;
+    input.inputMutex.unlock();
 }
 }
