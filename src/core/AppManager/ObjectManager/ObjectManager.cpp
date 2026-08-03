@@ -49,7 +49,7 @@ void ObjectManager::removeObject(Object* object){
 
 void ObjectManager::deleteAllObjects(){   
     while(Objects.size()!=0){
-        Object* obj=Objects[0];
+        Object* obj=Objects[0];   
 
         delete obj;
     }

@@ -1,7 +1,6 @@
 #include <ObjectManager.hpp>
 #include <Object.hpp>
 #include <algorithm>
-#include <thread>
 #include <vector>
 
 static CebeciEngine::Core::App::Object::ObjectManager& objectManager=CebeciEngine::Core::App::Object::ObjectManager::instance();
@@ -119,31 +118,11 @@ bool Object::setParent(Object* parent){
 }
 
 void Object::lock() {
-    std::thread::id current_id = std::this_thread::get_id();
-        
-    if (ownerThread.load(std::memory_order_relaxed) == current_id) {
-        recursionCount++;
-        return;
-    }
-
     mtx.lock();
-    ownerThread.store(current_id, std::memory_order_relaxed);
-    recursionCount = 1;
 }
 
 void Object::unlock(){
-    recursionCount--;
-    if(recursionCount==0){
-        ownerThread.store(std::thread::id{},std::memory_order_release);
-    }
     mtx.unlock();
-}
-
-Object* Object::operator->(){
-    while(1){
-        if(std::this_thread::get_id()==ownerThread || ownerThread==std::thread::id{}) return this;
-        std::this_thread::yield();
-    }
 }
 
 }

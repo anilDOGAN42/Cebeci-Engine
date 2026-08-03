@@ -1,8 +1,6 @@
 #pragma once
-#include <atomic>
 #include <mutex>
 #include <string>
-#include <thread>
 #include <vector>
 
 namespace CebeciEngine::Core::App::Object {
@@ -56,12 +54,9 @@ public:
     void unlock();
     void lock();
 
-    Object* operator->();
 
 private:
     std::recursive_mutex mtx;
-    std::atomic<std::thread::id> ownerThread={ std::thread::id{} };
-    unsigned int recursionCount{0};
 
     Object* parent;
     std::vector<Object*> Components;

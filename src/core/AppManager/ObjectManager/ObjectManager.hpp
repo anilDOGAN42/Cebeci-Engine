@@ -2,10 +2,12 @@
 #include "application.hpp"
 #include <Object.hpp>
 #include <mutex>
+#include <typeinfo>
 #include <vector>
 #include <string>
 #include <map>
-#include <typeinfo>
+
+
 
 namespace CebeciEngine::Core::App{class App;};//forward declaration
 namespace CebeciEngine::Core::App::Object {
@@ -73,10 +75,10 @@ private:
 
     size_t avaibleID=0;
 
-    std::mutex ObjectsMutex;
+    std::recursive_mutex ObjectsMutex;
     std::vector<Object*> Objects;
     
-    std::mutex ObjectsByTagMutex;
+    std::recursive_mutex ObjectsByTagMutex;
     std::map<std::string, std::vector<Object*>> ObjectsByTag;
 
 };
