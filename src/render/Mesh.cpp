@@ -38,7 +38,7 @@ void Mesh::draw(){
     Camera::camera* cam=app.getActiveScenes().at(0)->getActiveCamera();
 
     do {
-        Transforms.push_back(*(parent)->getComponentByType<Core::transform>());
+        Transforms.push_back(*(parent)->getChildByType<Core::transform>());
         Object* p=parent->getParent();
         if(p!=nullptr){
             parent=dynamic_cast<node*>(p);

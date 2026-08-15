@@ -24,7 +24,6 @@ public:
     App(const App&) = delete;
     App& operator=(const App&) = delete;
 
-
     unsigned int getShaderProgramID();
 
     float getScreenRatio();

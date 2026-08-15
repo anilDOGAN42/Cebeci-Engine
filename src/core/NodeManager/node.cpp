@@ -8,14 +8,14 @@ namespace CebeciEngine::Core {
 
 node::node(){
     transform* Transform = new transform;
-    this->addComponent(Transform);
+    this->addChild(Transform);
     
 }
-bool node::addComponent(Object* object){
+bool node::addChild(Object* object){
 
     if(!object->canBeAddedToNode()) return false;
 
-    Object::addComponent(object);
+    Object::addChild(object);
 
     return true;
 }

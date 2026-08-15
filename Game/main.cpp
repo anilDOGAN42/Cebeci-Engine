@@ -154,7 +154,7 @@ public:
         objeMesh->changeTexture(texture);
 
         ObjeTransform=new transform();
-        Obje->addComponent(texture);
+        Obje->addChild(texture);
 
         ObjeTransform->Position={0,0,0};
         ObjeTransform->Rotation={0,0,0};
@@ -167,8 +167,16 @@ public:
 
         cam->calculate();
 
-        Obje->addComponent(objeMesh);
-        Obje->addComponent(ObjeTransform);
+        Obje->addChild(objeMesh);
+        Obje->addChild(ObjeTransform);
+
+        node* n=new node();
+        n->addChild(new Mesh(mesh));
+
+        sahne->addNode(n);
+
+        sahne->removeNode(n);
+        delete n;
 
         sahne->addNode(Obje);
         sahne->setCamera(cam);

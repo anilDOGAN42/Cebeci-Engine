@@ -21,15 +21,15 @@ public:
 
     bool removeTag(std::string name);
 
-    bool addComponent(Object* object);
-    bool removeComponent(Object* object);
+    bool addChild(Object* object);
+    bool removeChild(Object* object);
 
-    Object* getComponent(std::string name);
-    Object* getComponent(unsigned int id);
+    Object* getChild(std::string name);
+    Object* getChild(unsigned int id);
 
     template<typename T>
-    T* getComponentByType(){
-        for(Object* o:Components){
+    T* getChildByType(){
+        for(Object* o:Childs){
             if(T* casted=dynamic_cast<T*>(o))
                 return casted;
         }
@@ -37,9 +37,9 @@ public:
     }
 
     template<typename T>
-    std::vector<T*> getComponentsByType(){
+    std::vector<T*> getChildsByType(){
         std::vector<T*> matchingObjects;
-        for(Object* o:Components){
+        for(Object* o:Childs){
             if(T* casted=dynamic_cast<T*>(o))
                 matchingObjects.push_back(casted);
         }
@@ -54,45 +54,20 @@ public:
     void unlock();
     void lock();
 
+    bool isActive();
+    void activate();
+    void deactivate();
 
 private:
     std::recursive_mutex mtx;
 
     Object* parent;
-    std::vector<Object*> Components;
+    std::vector<Object*> Childs;
+
+    bool active;
+
 protected:
     bool isSingleton=false;
     bool isNodeComponent=true;
-};
-
-
-
-template<typename T>
-class ObjectPointer:public Object{
-public:
-    ObjectPointer(T* object){
-        static_assert(std::is_base_of_v<Object, T>, "Template parameter T must be derived from Object!");
-        this->object=object;
-    }
-        
-private:
-    class Lock{
-        friend class ObjectPointer;
-        T* object;
-    public:
-        Lock(T* object){
-            this->object=object;
-            object->lock();
-        }
-        ~Lock(){
-            object->unlock();
-        }
-    };
-    T* object;
-public:
-    Lock operator->(){
-        return Lock(object);
-    }
-        
 };
 }

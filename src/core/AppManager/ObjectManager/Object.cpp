@@ -13,16 +13,16 @@ Object::Object(){
 
 Object::~Object(){
     if(this->parent != nullptr) {
-        this->parent->removeComponent(this);
+        this->parent->removeChild(this);
         this->parent=nullptr;
     }
 
-    for(Object* component:Components){
+    for(Object* component:Childs){
         component->parent=nullptr;
         delete component;
     }
 
-    Components.clear();
+    Childs.clear();
 
     objectManager.removeObject(this);
 }
@@ -57,40 +57,40 @@ bool Object::removeTag(std::string tagName){
     return true;
 }
 
-bool Object::addComponent(Object* object){
+bool Object::addChild(Object* object){
     if(object->isSingleton){
-        for(Object* o:Components){
+        for(Object* o:Childs){
             if(typeid(*o)==typeid(*object))
                 return false;
         }
     }
-    Components.push_back(object);
+    Childs.push_back(object);
     object->parent=this;
     return true;
 }
 
-bool Object::removeComponent(Object* object){
+bool Object::removeChild(Object* object){
 
-    auto objectAtComponents=std::find(Components.begin(),Components.end(),object);
+    auto objectAtChilds=std::find(Childs.begin(),Childs.end(),object);
 
-    if(objectAtComponents==Components.end())
+    if(objectAtChilds==Childs.end())
         return false;
 
-    Components.erase(objectAtComponents);
+    Childs.erase(objectAtChilds);
     
     return true;
 }
 
-Object* Object::getComponent(std::string name){
-    for(Object* o:Components){
+Object* Object::getChild(std::string name){
+    for(Object* o:Childs){
         if(o->name==name)
             return o;
     }
     return nullptr;
 }
 
-Object* Object::getComponent(unsigned int id){
-    for(Object* o:Components){
+Object* Object::getChild(unsigned int id){
+    for(Object* o:Childs){
         if(o->id==id)
             return o;
     }
@@ -107,14 +107,14 @@ Object* Object::getParent(){
     
 bool Object::setParent(Object* parent){
     if(this->parent!=nullptr)
-        this->parent->removeComponent(this);
+        this->parent->removeChild(this);
 
     this->parent=parent;
 
     if(parent == nullptr)
         return true;
 
-    return parent->addComponent(this);;
+    return parent->addChild(this);;
 }
 
 void Object::lock() {
@@ -123,6 +123,17 @@ void Object::lock() {
 
 void Object::unlock(){
     mtx.unlock();
+}
+
+bool Object::isActive(){
+    return this->active;
+}
+
+void Object::activate(){
+    this->active=true;
+}
+void Object::deactivate(){
+    this->active=false;
 }
 
 }
