@@ -12,9 +12,13 @@ class node;
 class scene:public App::Object::Object{
 public:
 
-
     void addNode(node* Node);
     void removeNode(node* Node);
+
+    bool setParent(Object* object);
+    bool addChild(Object* object);
+
+    std::vector<node*>& getNodes();
 
     void drawScene();
     
@@ -30,4 +34,3 @@ private:
     
 };
 }
-

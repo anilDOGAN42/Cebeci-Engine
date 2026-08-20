@@ -1,4 +1,7 @@
+#include <CebeciEngine.hpp>
+#include "Input.hpp"
 #include "Mesh.hpp"
+#include "Task.hpp"
 #include "TaskManager.hpp"
 #include "Thread.hpp"
 #include "camera.hpp"
@@ -6,7 +9,6 @@
 #include "scene.hpp"
 #include "texture.hpp"
 #include "transform.hpp"
-#include <CebeciEngine.hpp>
 #include <vector>
 #include <glm/fwd.hpp>
 
@@ -144,6 +146,28 @@ public:
     }
 };
 
+class moveObject:public Task{
+private:
+    App::Input::Input& input= App::Input::Input::instance();
+
+public:
+    void Update(double deltaTime) override{
+
+        node* Parent=(node*)this->getParent();
+        if(Parent==nullptr) return;
+
+        transform* Transform=Parent->getChildByType<transform>();
+
+        if(input.isKeyDown(KEY_UP)){
+            Transform->Position.x+=0.5*deltaTime;
+        }
+        if(input.isKeyDown(KEY_DOWN)){
+            Transform->Position.x-=0.5*deltaTime;
+        }
+
+    }
+
+};
 class initTask:public Task{
 public:
     void Init() override{
@@ -170,22 +194,27 @@ public:
         Obje->addChild(objeMesh);
         Obje->addChild(ObjeTransform);
 
-        node* n=new node();
-        n->addChild(new Mesh(mesh));
+        moveObject* moveObjectTask=new moveObject;
+        Obje->addChild(moveObjectTask);
+        
+        node* ObjeChild=new node();
+        ObjeChild->addChild(new Mesh(mesh));
+        ObjeChild->getChildByType<Mesh>()->changeTexture(texture);
 
-        sahne->addNode(n);
+        ObjeChild->getChildByType<transform>()->Position.x=-3;
 
-        sahne->removeNode(n);
-        delete n;
-
-        sahne->addNode(Obje);
+        Obje->addChild(ObjeChild);
+        sahne->addChild(Obje);
         sahne->setCamera(cam);
+
+        sahne->activate();
         
         TaskManager& taskManager=TaskManager::instance();
 
         CameraUpdate *task=new CameraUpdate;
         task->activate();
 
+        taskManager.addTaskToMainThread(moveObjectTask);
         taskManager.addTaskToMainThread(task);
 
     }

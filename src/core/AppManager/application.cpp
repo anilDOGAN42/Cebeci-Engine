@@ -80,8 +80,32 @@ float App::getScreenRatio(){
 }
 
 unsigned int App::addScene(scene* Scene){
+    scenesMutex.lock();
+
     scenes.push_back(Scene);
+
+    scenesMutex.unlock();
+
     return scenes.size()-1;
+}
+
+bool App::removeScene(scene* Scene){
+    scenesMutex.lock(); 
+
+    for(unsigned int i=0;i<scenes.size();i++){
+        if(scenes.at(i)==Scene){
+            scenes.erase(scenes.begin()+i); 
+            return true;
+        }
+    }
+    scenesMutex.unlock();
+    return false;
+}
+bool App::removeScene(unsigned int sceneId){
+    if(sceneId>=scenes.size()) return false;
+    
+    scenes.erase(scenes.begin()+sceneId); 
+    return true;
 }
 
 bool App::isSceneActive(unsigned int sceneId){
@@ -101,6 +125,12 @@ bool App::activateScene(unsigned int sceneId){
     activeScenesMutex.lock();
     activeScenes.push_back(scenes.at(sceneId));
     activeScenesMutex.unlock();
+
+    scenesMutex.lock();
+
+    scenes.at(sceneId)->activate();
+
+    scenesMutex.unlock();
 
     return true;
 }

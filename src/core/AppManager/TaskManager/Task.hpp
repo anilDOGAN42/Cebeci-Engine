@@ -7,12 +7,8 @@
 using Clock = std::chrono::steady_clock;
 
 namespace CebeciEngine::Core::App::Task{
-class Task:Object::Object{
+class Task:public Object::Object{
 public:
-    
-    virtual void activate();
-    virtual void deactivate();
-
     void run();
 
     std::thread::id getTaskThreadId();
@@ -27,7 +23,6 @@ protected:
     
     Clock::time_point lastTime = Clock::now();
 
-    bool active;
     bool Init_Function_Ran=false;
     bool Start_Function_Ran=false;
 

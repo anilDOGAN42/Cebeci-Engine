@@ -7,17 +7,8 @@ void Task::clearDeltaTime(){
     this->lastTime=Clock::now();
 }
 
-void Task::activate(){
-    this->clearDeltaTime();
-    this->active=true;
-}
-
-void Task::deactivate(){
-    this->active=false;
-}
-
 void Task::run(){
-    if(!active) return;
+    if(!isActive()) return;
     if(!Init_Function_Ran) {Init();  Init_Function_Ran=true; }
     if(!Start_Function_Ran){Start(); Start_Function_Ran=true;}
 

@@ -35,6 +35,8 @@ public:
     std::vector<scene*>& getActiveScenes();
     
     unsigned int addScene(scene* Scene);
+    bool removeScene(scene* Scene);
+    bool removeScene(unsigned int sceneId);
 
     void changeScreenRatio(float ratio);
 

@@ -18,7 +18,6 @@ public:
     std::vector<std::string> tags;
 
     void addTag(std::string tagName);
-
     bool removeTag(std::string name);
 
     bool addChild(Object* object);
@@ -38,7 +37,7 @@ public:
 
     template<typename T>
     std::vector<T*> getChildsByType(){
-        std::vector<T*> matchingObjects;
+        std::vector<T*> matchingObjects{};
         for(Object* o:Childs){
             if(T* casted=dynamic_cast<T*>(o))
                 matchingObjects.push_back(casted);

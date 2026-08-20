@@ -64,6 +64,13 @@ bool Object::addChild(Object* object){
                 return false;
         }
     }
+
+    if(this->active){
+        object->activate();
+    }else{
+        object->deactivate();
+    }
+
     Childs.push_back(object);
     object->parent=this;
     return true;
@@ -114,7 +121,7 @@ bool Object::setParent(Object* parent){
     if(parent == nullptr)
         return true;
 
-    return parent->addChild(this);;
+    return parent->addChild(this);
 }
 
 void Object::lock() {
@@ -131,9 +138,15 @@ bool Object::isActive(){
 
 void Object::activate(){
     this->active=true;
+    for(Object* child:this->Childs){
+        child->activate();
+    }
 }
 void Object::deactivate(){
     this->active=false;
+    for(Object* child:this->Childs){
+        child->deactivate();
+    }
 }
 
 }
