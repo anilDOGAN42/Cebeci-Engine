@@ -6,8 +6,8 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/Dependencies.cmake")
 file(GLOB_RECURSE core_source CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/core/*.cpp)
 file(GLOB_RECURSE render_source CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/render/*.cpp)
 
-add_library(core SHARED ${core_source})
-add_library(render SHARED ${render_source})
+add_library(core SHARED ${core_source} ${CMAKE_CURRENT_SOURCE_DIR}/glad.c)
+add_library(render SHARED ${render_source} ${CMAKE_CURRENT_SOURCE_DIR}/glad.c)
 
 target_link_libraries(core PUBLIC render)
 target_link_libraries(render PUBLIC glfw)
