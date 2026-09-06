@@ -6,6 +6,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector.hpp>
 
+using namespace CebeciEngine::Core::Math;
+
 namespace CebeciEngine::Core {
 class transform:public App::Object::Object{
 public:
