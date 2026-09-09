@@ -1,9 +1,8 @@
 #include <Mesh.hpp>
+#include "Matrix.hpp"
 #include "ObjectManager.hpp"
-#include "SSBO.hpp"
 #include "VBO.hpp"
 #include "camera.hpp"
-#include "glm/fwd.hpp"
 #include "texture.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
@@ -15,7 +14,6 @@ static CebeciEngine::Core::App::App& app=CebeciEngine::Core::App::App::instance(
 namespace CebeciEngine::Render {
 Mesh::Mesh(std::vector<vertex> verticies){
     isSingleton=true;
-    transforms=new SSBO(0);
     this->shaderProgram=app.getShaderProgramID();
 
     this->verticies=verticies;
@@ -23,7 +21,6 @@ Mesh::Mesh(std::vector<vertex> verticies){
 }
 
 Mesh::~Mesh(){
-    delete transforms;
 }
 
 
@@ -32,25 +29,13 @@ void Mesh::changeTexture(Texture::Texture2D* texture){
 }
 
 void Mesh::draw(){
-    std::vector<glm::mat4> Transforms;
-    node* parent=dynamic_cast<node*>(this->getParent());
+    Core::Transform* t=this->getParent()->getChildByType<Core::Transform>();
 
+    Mat4 transform=t->getWorldMatrix();
     Camera::camera* cam=app.getActiveScenes().at(0)->getActiveCamera();
 
-    do {
-        Transforms.push_back(*(parent)->getChildByType<Core::transform>());
-        Object* p=parent->getParent();
-        if(p!=nullptr){
-            parent=dynamic_cast<node*>(p);
-        }
-        else break;
-    }while(parent!=nullptr);
-
-    transforms->changeData<glm::mat4,glm::mat4>(&Transforms);
-    transforms->bind();
-
-    GLint transformCountLoc = glGetUniformLocation(shaderProgram, "transformCount");    
-    glUniform1i(transformCountLoc, Transforms.size());
+    GLint transformLoc = glGetUniformLocation(shaderProgram, "transform");    
+    glUniformMatrix4fv(transformLoc,1,GL_TRUE,transform.v);
 
     GLint uTextureLoc=glGetUniformLocation(shaderProgram, "uTexture");
     glUniform1i(uTextureLoc,0);

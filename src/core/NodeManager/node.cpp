@@ -7,8 +7,8 @@
 namespace CebeciEngine::Core {
 
 node::node(){
-    transform* Transform = new transform;
-    this->addChild(Transform);
+    Transform* transform = new Transform;
+    this->addChild(transform);
     
 }
 bool node::addChild(Object* object){

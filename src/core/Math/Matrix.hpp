@@ -10,7 +10,7 @@ union Mat4;
 
 typedef union Mat2{
     float m[2][2];
-    float v[4];
+    float v[4]={0,0,0,0};
 
     float* operator[](int row);
     const float* operator[](int row) const;
@@ -28,7 +28,7 @@ typedef union Mat2{
 
 typedef union Mat3{
     float m[3][3];
-    float v[9];
+    float v[9]={0,0,0,0,0,0,0,0,0};
 
     float* operator[](int row);
     const float* operator[](int row) const;
@@ -46,7 +46,7 @@ typedef union Mat3{
 
 typedef union Mat4{
     float m[4][4];
-    float v[16];
+    float v[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
     float* operator[](int row);
     const float* operator[](int row) const;

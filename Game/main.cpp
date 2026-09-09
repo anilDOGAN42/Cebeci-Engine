@@ -9,6 +9,7 @@
 #include "scene.hpp"
 #include "texture.hpp"
 #include "transform.hpp"
+#include <iostream>
 #include <vector>
 #include <glm/fwd.hpp>
 
@@ -27,7 +28,6 @@ static scene* sahne;
 
 static node* Obje;
 static Mesh* objeMesh;
-static transform* ObjeTransform;
 
 static std::vector<vertex> mesh={
         vertex{{-0.5,-0.5,-0.5},{0,0}},
@@ -152,18 +152,41 @@ private:
 
 public:
     void Update(double deltaTime) override{
+        node* obje=(node*)this->getParent();
+        bool print=false;
 
-        node* Parent=(node*)this->getParent();
-        if(Parent==nullptr) return;
-
-        transform* Transform=Parent->getChildByType<transform>();
-
-        if(input.isKeyDown(KEY_UP)){
-            Transform->Position.x+=0.5*deltaTime;
+        if (input.isKeyDown(GLFW_KEY_Z)){
+            obje->getChildByType<Transform>()->setRotation({0,0,0});
+            print=true;
         }
-        if(input.isKeyDown(KEY_DOWN)){
-            Transform->Position.x-=0.5*deltaTime;
+        if (input.isKeyDown(GLFW_KEY_UP)){
+            obje->getChildByType<Transform>()->RotateZ(10*deltaTime);
         }
+        if (input.isKeyDown(GLFW_KEY_DOWN)){
+            obje->getChildByType<Transform>()->RotateZ(-10*deltaTime);
+            print=true;
+        }
+        if (input.isKeyDown(GLFW_KEY_LEFT)){
+            obje->getChildByType<Transform>()->RotateY(10*deltaTime);
+            print=true;
+        }
+        if (input.isKeyDown(GLFW_KEY_RIGHT)){
+            obje->getChildByType<Transform>()->RotateY(-10*deltaTime);
+            print=true;
+        }
+        if (input.isKeyDown(GLFW_KEY_Q)){
+            obje->getChildByType<Transform>()->RotateX(10*deltaTime);
+            print=true;
+        }
+        if (input.isKeyDown(GLFW_KEY_E)){
+            obje->getChildByType<Transform>()->RotateX(-10*deltaTime);
+            print=true;
+        }
+        /*if(print)
+            std::cout << "Obje Ptr: " << obje 
+          << " | Task Ptr: " << this 
+          << " | Y: " << obje->getChildByType<Transform>()->getRotation().y << '\n';
+        */
 
     }
 
@@ -177,12 +200,7 @@ public:
         Texture::Texture2D* texture=new Texture::Texture2D((char*)"./textures/doku1.png");
         objeMesh->changeTexture(texture);
 
-        ObjeTransform=new transform();
         Obje->addChild(texture);
-
-        ObjeTransform->Position={0,0,0};
-        ObjeTransform->Rotation={0,0,0};
-        ObjeTransform->Scale={1,1,1};
 
         cam=new Camera::camera3D(100.0f,45.0f);
 
@@ -192,7 +210,6 @@ public:
         cam->calculate();
 
         Obje->addChild(objeMesh);
-        Obje->addChild(ObjeTransform);
 
         moveObject* moveObjectTask=new moveObject;
         Obje->addChild(moveObjectTask);
@@ -201,7 +218,8 @@ public:
         ObjeChild->addChild(new Mesh(mesh));
         ObjeChild->getChildByType<Mesh>()->changeTexture(texture);
 
-        ObjeChild->getChildByType<transform>()->Position.x=-3;
+        ObjeChild->getChildByType<Transform>()->setPosition({-3,0,0});
+        ObjeChild->getChildByType<Transform>()->setRotation({45,45,45});
 
         Obje->addChild(ObjeChild);
         sahne->addChild(Obje);
@@ -218,7 +236,7 @@ public:
         taskManager.addTaskToMainThread(task);
 
     }
-    
+
 };
 
 int main() {

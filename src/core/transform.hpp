@@ -1,5 +1,7 @@
 #pragma once
+#include "Matrix.hpp"
 #include "Object.hpp"
+#include "Quaternion.hpp"
 #include <glm/fwd.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/glm.hpp>
@@ -9,29 +11,45 @@
 using namespace CebeciEngine::Core::Math;
 
 namespace CebeciEngine::Core {
-class transform:public App::Object::Object{
+class Transform:public App::Object::Object{
 public:
-    transform();
+    Mat4 getLocalMatrix();
+    Mat4 getWorldMatrix();
 
-    vec3 Position;
-    vec3 Rotation;
-    vec3 Scale;
+    void setPosition(Vec3 v);
+    void setRotation(Vec3 v);
+    void setScale(Vec3 v);
 
+    Vec3 getPosition() const;
+    Vec3 getRotation() const;
+    Vec3 getScale   () const;
 
-    operator glm::mat4() const {
-        glm::mat4 mat(1.0f); 
+    void Rotate(Vec3 v);
+    void RotateX(float degrees);
+    void RotateY(float degrees);
+    void RotateZ(float degrees);
 
-        mat = glm::translate(mat, (glm::vec3)(vec3)Position); 
-        
-        mat = glm::rotate(mat, glm::radians(Rotation.z), glm::vec3(0, 0, 1));
-        mat = glm::rotate(mat, glm::radians(Rotation.y), glm::vec3(0, 1, 0));
-        mat = glm::rotate(mat, glm::radians(Rotation.x), glm::vec3(1, 0, 0));
+private:
+    vec3 Position={0,0,0};
+    Quaternion Rotation;
+    vec3 Scale={1,1,1};
 
-        
-        mat = glm::scale(mat, (glm::vec3)(vec3)Scale);
-        return mat;
-    }
-};//Buna iyi bir ayar çekmek lazım
-// Quaternion kullanmamız lazım
+    void calculateWorldMatrix();
+    void calculateLocalMatrix();
+    
+    Mat4 calculatePositionMatrix() const;
+    Mat4 calculateRotationMatrix() const;
+    Mat4 calculateScaleMatrix() const;
+
+    mutable bool isWorldMatrixDirty=true;
+    mutable Mat4 worldMatrix;
+    
+    mutable bool isLocalMatrixDirty=true;
+    mutable Mat4 localMatrix;
+
+    void markDirty();
+
+};
+
 }
 

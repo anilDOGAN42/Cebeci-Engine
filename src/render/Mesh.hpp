@@ -1,5 +1,4 @@
 #pragma once
-#include "SSBO.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
 #include "node.hpp"
@@ -25,10 +24,8 @@ public:
 
     std::vector<vertex>* getVerticies();
 
-
     VBO vbo;
     VAO vao;
-    SSBO *transforms;
 
 private:
     Texture::Texture2D* texture;
