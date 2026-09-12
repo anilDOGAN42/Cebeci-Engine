@@ -155,6 +155,20 @@ public:
         node* obje=(node*)this->getParent();
         bool print=false;
 
+        static bool removed=false;
+
+        if (input.isKeyPressed(GLFW_KEY_O)){
+            if(removed) {
+                ((scene*)(obje->getParent()))->addChild(obje);
+                std::cout<<"Added\n";
+                removed=false;
+            }else{
+                ((scene*)(obje->getParent()))->removeChild(obje);
+                std::cout<<"Removed\n";    
+                removed=true;
+            }
+        }   
+
         if (input.isKeyDown(GLFW_KEY_Z)){
             obje->getChildByType<Transform>()->setRotation({0,0,0});
             print=true;
@@ -182,11 +196,6 @@ public:
             obje->getChildByType<Transform>()->RotateX(-10*deltaTime);
             print=true;
         }
-        /*if(print)
-            std::cout << "Obje Ptr: " << obje 
-          << " | Task Ptr: " << this 
-          << " | Y: " << obje->getChildByType<Transform>()->getRotation().y << '\n';
-        */
 
     }
 
@@ -214,12 +223,20 @@ public:
         moveObject* moveObjectTask=new moveObject;
         Obje->addChild(moveObjectTask);
         
-        node* ObjeChild=new node();
+        node* ObjeChild=new node{};
         ObjeChild->addChild(new Mesh(mesh));
         ObjeChild->getChildByType<Mesh>()->changeTexture(texture);
 
         ObjeChild->getChildByType<Transform>()->setPosition({-3,0,0});
         ObjeChild->getChildByType<Transform>()->setRotation({45,45,45});
+
+        node* childChild=new node{};
+        childChild->addChild(new Mesh(mesh));
+        childChild->getChildByType<Mesh>()->changeTexture(texture);
+
+        childChild->getChildByType<Transform>()->setPosition({-3,0,0});
+
+        ObjeChild->addChild(childChild);
 
         Obje->addChild(ObjeChild);
         sahne->addChild(Obje);

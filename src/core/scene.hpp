@@ -18,6 +18,8 @@ public:
     bool setParent(Object* object);
     bool addChild(Object* object);
 
+    bool removeChild(Object* object);
+
     std::vector<node*>& getNodes();
 
     void drawScene();

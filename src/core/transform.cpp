@@ -167,8 +167,7 @@ void Transform::markDirty(){
     for(node* c:this->getParent()->getChildsByType<node>()){
         Transform* t=c->getChildByType<Transform>();
         if(t!=nullptr && t!=this){
-            t->isLocalMatrixDirty=true;
-            t->isWorldMatrixDirty=true;
+            t->markDirty();
         }
     }
 }

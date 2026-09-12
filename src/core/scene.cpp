@@ -52,6 +52,43 @@ bool scene::addChild(Object* object){
     return true;
 }
 
+bool scene::removeChild(Object* object){
+    if(typeid(*object)!=typeid(node)) return false;
+
+    Object::removeChild(object);
+
+    this->removeNode((node*)object);
+    ((node*)object)->addedToScene=false;
+
+    std::vector<node*>childs;
+
+    Object* obj=object;
+
+    do{
+        childs=((node*)obj)->getChildsByType<node>();
+
+        if(childs.size()==0){
+            obj=obj->getParent();
+            continue;
+        }
+        unsigned int i=0;
+        for(;i<childs.size();i++){
+            node* child=childs.at(i);
+            if(!child->addedToScene) continue;
+
+            this->removeNode(child);
+            child->addedToScene=false;
+
+            obj=child;
+            break;
+        }
+        if(i==childs.size()) obj=obj->getParent(); 
+
+    }while(obj!=this && obj!=nullptr);
+
+    return true;
+}
+
 std::vector<node*>& scene::getNodes(){
     return Nodes;
 }

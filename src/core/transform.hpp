@@ -24,6 +24,9 @@ public:
     Vec3 getRotation() const;
     Vec3 getScale   () const;
 
+    void Move(Vec3 v);
+    void MoveWorld(Vec3 v);
+
     void Rotate(Vec3 v);
     void RotateX(float degrees);
     void RotateY(float degrees);
