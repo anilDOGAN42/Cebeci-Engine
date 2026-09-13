@@ -11,7 +11,7 @@ Because the core focuses strictly on flexible object representation and underlyi
 
 ## Core Architecture & Ecosystem
 
-- **Object-Centric Design:** Almost everything within the engine core—including scenes, nodes, and components—inherits from a unified `Object` class. Objects natively support hierarchical parent-child relationships, tag indexing, component registration, and built-in thread-safety (via RAII-locked `ObjectPointer` smart proxies).
+- **Object-Centric Design:** Almost everything within the engine core—including scenes, nodes, and components—inherits from a unified `Object` class. Objects natively support hierarchical parent-child relationships, tag indexing and component registration.
   
 - **API-Free Modular System:** There are no restrictive plugin APIs or complex dynamic interfaces. Since everything is an `Object`, any official or third-party feature (e.g., physics solvers, audio streams, custom particle engines) can be written natively and attached directly as a component to the engine's core system.
   
