@@ -6,8 +6,11 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/Dependencies.cmake")
 file(GLOB_RECURSE core_source CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/core/*.cpp)
 file(GLOB_RECURSE render_source CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/render/*.cpp)
 
-add_library(core SHARED ${core_source} ${CMAKE_CURRENT_SOURCE_DIR}/glad.c)
-add_library(render SHARED ${render_source} ${CMAKE_CURRENT_SOURCE_DIR}/glad.c)
+add_library(core SHARED ${core_source})
+add_library(render SHARED ${render_source})
+
+target_compile_options(core PRIVATE -g -O0)
+target_compile_options(render PRIVATE -g -O0)
 
 target_link_libraries(core PUBLIC render)
 target_link_libraries(render PUBLIC glfw)
@@ -18,6 +21,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/src/render"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/render/texture"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/render/projection"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/render/Vertex"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/AppManager"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/AppManager/Input"

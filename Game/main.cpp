@@ -9,7 +9,6 @@
 #include "scene.hpp"
 #include "texture.hpp"
 #include "transform.hpp"
-#include <iostream>
 #include <vector>
 #include <glm/fwd.hpp>
 
@@ -149,50 +148,61 @@ public:
 class moveObject:public Task{
 private:
     App::Input::Input& input= App::Input::Input::instance();
-
+    node* obje=(node*)this->getParent();
+    std::vector<node*> objeler;
+    unsigned int objeIndex=0;
 public:
+    void Start() override{
+        objeler = sahne->getNodes();
+    }
+
     void Update(double deltaTime) override{
-        node* obje=(node*)this->getParent();
+
         bool print=false;
 
         static bool removed=false;
-
-        if (input.isKeyPressed(GLFW_KEY_O)){
-            if(removed) {
-                ((scene*)(obje->getParent()))->addChild(obje);
-                std::cout<<"Added\n";
-                removed=false;
+        
+        if (input.isKeyPressed(KEY_J)){
+            if(objeIndex>=objeler.size()-1) {
+                objeIndex=0;
             }else{
-                ((scene*)(obje->getParent()))->removeChild(obje);
-                std::cout<<"Removed\n";    
-                removed=true;
+                objeIndex++;
             }
-        }   
+        }
+        if (input.isKeyPressed(KEY_K)){
+            if(objeIndex==0) {
+                objeIndex=2;
+            }else{
+                objeIndex--;
+            }
+        }
 
-        if (input.isKeyDown(GLFW_KEY_Z)){
+        obje=objeler.at(objeIndex);
+
+        if (input.isKeyDown(KEY_Z)){
             obje->getChildByType<Transform>()->setRotation({0,0,0});
             print=true;
         }
-        if (input.isKeyDown(GLFW_KEY_UP)){
-            obje->getChildByType<Transform>()->RotateZ(10*deltaTime);
-        }
-        if (input.isKeyDown(GLFW_KEY_DOWN)){
+        if (input.isKeyDown(KEY_UP)){
             obje->getChildByType<Transform>()->RotateZ(-10*deltaTime);
+        }
+        if (input.isKeyDown(KEY_DOWN)){
+            obje->getChildByType<Transform>()->RotateZ(10*deltaTime);
             print=true;
         }
-        if (input.isKeyDown(GLFW_KEY_LEFT)){
+        if (input.isKeyDown(KEY_LEFT)){
             obje->getChildByType<Transform>()->RotateY(10*deltaTime);
             print=true;
         }
-        if (input.isKeyDown(GLFW_KEY_RIGHT)){
+        if (input.isKeyDown(KEY_RIGHT)){
             obje->getChildByType<Transform>()->RotateY(-10*deltaTime);
             print=true;
         }
-        if (input.isKeyDown(GLFW_KEY_Q)){
+        if (input.isKeyDown(KEY_Q)){
             obje->getChildByType<Transform>()->RotateX(10*deltaTime);
             print=true;
         }
-        if (input.isKeyDown(GLFW_KEY_E)){
+        if (input.isKeyDown(KEY_E)){
             obje->getChildByType<Transform>()->RotateX(-10*deltaTime);
             print=true;
         }
@@ -211,7 +221,7 @@ public:
 
         Obje->addChild(texture);
 
-        cam=new Camera::camera3D(100.0f,45.0f);
+        cam=new Camera::camera3D(100.0f,90.0f);
 
         cam->camPosition={0,0,-3};
         cam->camRotation={0,0,0};
@@ -228,7 +238,6 @@ public:
         ObjeChild->getChildByType<Mesh>()->changeTexture(texture);
 
         ObjeChild->getChildByType<Transform>()->setPosition({-3,0,0});
-        ObjeChild->getChildByType<Transform>()->setRotation({45,45,45});
 
         node* childChild=new node{};
         childChild->addChild(new Mesh(mesh));

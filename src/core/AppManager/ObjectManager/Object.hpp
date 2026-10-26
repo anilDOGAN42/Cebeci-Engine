@@ -4,9 +4,7 @@
 #include <vector>
 
 namespace CebeciEngine::Core::App::Object {
-    
-template<typename T>
-class ObjectPointer;
+
 class Object{
 public:
     unsigned long int id;
