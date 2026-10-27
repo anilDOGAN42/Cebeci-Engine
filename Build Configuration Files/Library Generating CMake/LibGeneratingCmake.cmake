@@ -22,6 +22,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/src/render/texture"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/render/projection"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/render/Vertex"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/render/Buffer"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/AppManager"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/AppManager/Input"
